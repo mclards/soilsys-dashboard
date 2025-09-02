@@ -35,15 +35,15 @@
     }
 
     .bar-title {
-      margin-bottom: 10px;
-      font-size: 22px;
+      margin-top: 10px;
+      font-size: 20px;
       font-weight: bold;
       color: #34495e;
     }
 
     canvas {
       display: block;
-      margin: 0 auto 25px auto;
+      margin: 0 auto;
     }
 
     .gauge-row {
@@ -52,6 +52,12 @@
       align-items: center;
       gap: 30px;
       margin-bottom: 20px;
+      flex-wrap: wrap; /* ✅ allow wrapping nicely on small screens */
+    }
+
+    .gauge-row > div {
+      flex: 1;
+      min-width: 140px;
     }
 
     .status {
@@ -129,7 +135,12 @@
       background-color: #e74c3c;
     }
 
+    /* ✅ Mobile view */
     @media (max-width: 600px) {
+      .dashboard {
+        padding: 20px;
+      }
+
       .buttons {
         flex-direction: column;
         gap: 15px;
@@ -141,7 +152,17 @@
       }
 
       .gauge-row {
-        flex-direction: column;
+        flex-direction: row; /* side by side */
+        gap: 15px;
+      }
+
+      .gauge-row > div {
+        flex: 1;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: auto;
       }
     }
   </style>
@@ -153,10 +174,10 @@
     <div class="gauge-row">
       <div>
         <canvas id="moistureCanvas" width="250" height="250"></canvas>
-        <div class="bar-title">Moisture Level</div>
+        <div class="bar-title">Moisture</div>
       </div>
       <div>
-        <canvas id="tempCanvas" width="60" height="250"></canvas>
+        <canvas id="tempCanvas" width="100" height="250"></canvas>
         <div class="bar-title">Temperature</div>
       </div>
     </div>
@@ -235,7 +256,7 @@
       if (topic === topicJSON) {
         const data = JSON.parse(message.toString());
         targetMoisture = data.moisture;
-        targetTemp = data.temperature; // ✅ expects { moisture: X, temperature: Y, pumpRunning: bool, runtime: Z }
+        targetTemp = data.temperature;
         pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
         runtimeElem.innerText = data.runtime;
       }
@@ -326,16 +347,16 @@
       gradient.addColorStop(1, "red");
 
       tctx.fillStyle = "#eee";
-      tctx.fillRect(20, 0, 20, tempCanvas.height);
+      tctx.fillRect(30, 0, 40, tempCanvas.height);
 
       const fillHeight = (currentTemp / 50) * tempCanvas.height;
       tctx.fillStyle = gradient;
-      tctx.fillRect(20, tempCanvas.height - fillHeight, 20, fillHeight);
+      tctx.fillRect(30, tempCanvas.height - fillHeight, 40, fillHeight);
 
       tctx.fillStyle = "#111";
       tctx.font = "bold 16px Segoe UI";
       tctx.textAlign = "center";
-      tctx.fillText(Math.round(currentTemp) + "°C", 30, tempCanvas.height - fillHeight - 10);
+      tctx.fillText(Math.round(currentTemp) + "°C", 50, tempCanvas.height - fillHeight - 15);
 
       requestAnimationFrame(drawTemp);
     }
