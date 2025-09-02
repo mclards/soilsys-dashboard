@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +46,14 @@
       margin: 0 auto 25px auto;
     }
 
+    .gauge-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
     .status {
       margin-bottom: 25px;
       font-size: 18px;
@@ -64,7 +71,7 @@
 
     input {
       padding: 10px;
-      width: 140px; /* ✅ Shorter textbox */
+      width: 140px;
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 18px;
@@ -122,7 +129,6 @@
       background-color: #e74c3c;
     }
 
-    /* ✅ Mobile: stack buttons vertically */
     @media (max-width: 600px) {
       .buttons {
         flex-direction: column;
@@ -133,15 +139,27 @@
       button#off {
         width: 100%;
       }
+
+      .gauge-row {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
-
 <body>
   <div class="dashboard">
     <h2>SOIL MOISTURE DASHBOARD</h2>
-    <canvas id="moistureCanvas" width="250" height="250"></canvas>
-    <div class="bar-title">Moisture Level</div>
+
+    <div class="gauge-row">
+      <div>
+        <canvas id="moistureCanvas" width="250" height="250"></canvas>
+        <div class="bar-title">Moisture Level</div>
+      </div>
+      <div>
+        <canvas id="tempCanvas" width="60" height="250"></canvas>
+        <div class="bar-title">Temperature</div>
+      </div>
+    </div>
 
     <div class="status">
       <div>Server Status: <span id="mqttStatus" style="color:red">Disconnected</span></div>
@@ -163,7 +181,6 @@
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <script>
-    // Random client ID
     const clientId = "WebClient" + Math.floor(Math.random() * 1000 + 1);
     document.getElementById("clientIdText").innerText = clientId;
 
@@ -182,13 +199,16 @@
     const ctx = canvas.getContext('2d');
     const radius = canvas.width / 2 - 20;
 
+    const tempCanvas = document.getElementById('tempCanvas');
+    const tctx = tempCanvas.getContext('2d');
+
     const mqttStatusElem = document.getElementById('mqttStatus');
     const pumpStatusElem = document.getElementById('pumpStatus');
     const runtimeElem = document.getElementById('runtime');
     const runtimeInput = document.getElementById('runtimeInput');
 
-    let currentMoisture = 0;
-    let targetMoisture = 0;
+    let currentMoisture = 0, targetMoisture = 0;
+    let currentTemp = 0, targetTemp = 0;
 
     client.on('connect', () => {
       mqttStatusElem.innerText = 'Connected';
@@ -215,6 +235,7 @@
       if (topic === topicJSON) {
         const data = JSON.parse(message.toString());
         targetMoisture = data.moisture;
+        targetTemp = data.temperature; // ✅ expects { moisture: X, temperature: Y, pumpRunning: bool, runtime: Z }
         pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
         runtimeElem.innerText = data.runtime;
       }
@@ -248,9 +269,9 @@
       return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
     }
 
-    const dryColor = hexToRgb("#a0522d");   // brown
-    const midColor = hexToRgb("#9acd32");   // yellow-green
-    const wetColor = hexToRgb("#1e90ff");   // blue
+    const dryColor = hexToRgb("#a0522d");
+    const midColor = hexToRgb("#9acd32");
+    const wetColor = hexToRgb("#1e90ff");
 
     function getMoistureColor(value) {
       if (value < 50) {
@@ -261,44 +282,67 @@
     }
 
     function drawMoisture() {
-  const diff = targetMoisture - currentMoisture;
-  currentMoisture += diff * 0.05;
+      const diff = targetMoisture - currentMoisture;
+      currentMoisture += diff * 0.05;
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const angle = (currentMoisture / 100) * 2 * Math.PI;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const angle = (currentMoisture / 100) * 2 * Math.PI;
 
-  const rgb = getMoistureColor(currentMoisture);
-  const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+      const rgb = getMoistureColor(currentMoisture);
+      const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-  ctx.strokeStyle = '#eee';
-  ctx.lineWidth = 30;
-  ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+      ctx.strokeStyle = '#eee';
+      ctx.lineWidth = 30;
+      ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 30;
-  ctx.lineCap = 'round';
-  ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 30;
+      ctx.lineCap = 'round';
+      ctx.stroke();
 
-  // ✅ Moisture % text (bigger, bold, clearer)
-  ctx.fillStyle = '#111';
-  ctx.font = 'bold 36px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(Math.round(currentMoisture) + '%', centerX, centerY);
+      ctx.fillStyle = '#111';
+      ctx.font = 'bold 36px Segoe UI';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(Math.round(currentMoisture) + '%', centerX, centerY);
 
-  requestAnimationFrame(drawMoisture);
-}
+      requestAnimationFrame(drawMoisture);
+    }
 
+    function drawTemp() {
+      const diff = targetTemp - currentTemp;
+      currentTemp += diff * 0.05;
+
+      tctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+      const gradient = tctx.createLinearGradient(0, tempCanvas.height, 0, 0);
+      gradient.addColorStop(0, "blue");
+      gradient.addColorStop(1, "red");
+
+      tctx.fillStyle = "#eee";
+      tctx.fillRect(20, 0, 20, tempCanvas.height);
+
+      const fillHeight = (currentTemp / 50) * tempCanvas.height;
+      tctx.fillStyle = gradient;
+      tctx.fillRect(20, tempCanvas.height - fillHeight, 20, fillHeight);
+
+      tctx.fillStyle = "#111";
+      tctx.font = "bold 16px Segoe UI";
+      tctx.textAlign = "center";
+      tctx.fillText(Math.round(currentTemp) + "°C", 30, tempCanvas.height - fillHeight - 10);
+
+      requestAnimationFrame(drawTemp);
+    }
 
     drawMoisture();
+    drawTemp();
 
-    // Register Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log("Service Worker registered"));
@@ -306,4 +350,3 @@
   </script>
 </body>
 </html>
-
