@@ -4,8 +4,8 @@ self.addEventListener('install', event => {
       return cache.addAll([
         './dashboard.html',
         './manifest.json',
-        './icon-192.png',
-        './icon-512.png'
+        '.icon/icon-192.png',
+        '.icon/icon-512.png'
       ]);
     })
   );
@@ -18,3 +18,4 @@ self.addEventListener('fetch', event => {
     })
   );
 });
+
