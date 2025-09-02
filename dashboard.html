@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOIL MOISTURE CONTROL</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3498db">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dashboard {
+            background: #fff;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 480px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 28px;
+            text-transform: uppercase;
+        }
+
+        .bar-title {
+            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto 25px auto;
+        }
+
+        .status {
+            margin-bottom: 25px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .status div {
+            margin-bottom: 6px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            line-height: 2.2em;
+        }
+
+        input {
+            padding: 10px;
+            width: 180px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        button.send {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #2980b9;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.send:hover {
+            background: #3498db;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        button#on,
+        button#off {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        button#on {
+            background-color: #27ae60;
+        }
+
+        button#on:hover {
+            background-color: #2ecc71;
+        }
+
+        button#off {
+            background-color: #c0392b;
+        }
+
+        button#off:hover {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <h2>SOIL MOISTURE DASHBOARD</h2>
+        <canvas id="moistureCanvas" width="250" height="250"></canvas>
+        <div class="bar-title">Moisture Level</div>
+
+        <div class="status">
+            <div>Server Status: <span id="mqttStatus" style="color:red">Disconnected</span></div>
+            <div>Sprinkler Status: <span id="pumpStatus">OFF</span></div>
+            <div>Runtime: <span id="runtime">0</span> sec</div>
+            <div>Client ID: <span id="clientIdText"></span></div>
+        </div>
+
+        <div class="input-group">
+            <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
+            <button class="send" onclick="sendRuntime()">Send</button>
+        </div>
+
+        <div class="buttons">
+            <button id="on" onclick="sendPump(1)">Sprinkler ON</button>
+            <button id="off" onclick="sendPump(0)">Sprinkler OFF</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script>
+        // Random client ID
+        const clientId = "WebClient" + Math.floor(Math.random() * 1000 + 1);
+        document.getElementById("clientIdText").innerText = clientId;
+
+        const client = mqtt.connect('wss://c33fda18bbcd4c9998277dfe166c7c4a.s1.eu.hivemq.cloud:8884/mqtt', {
+            username: 'gwapooo',
+            password: '_Mclards23',
+            clientId: clientId,
+            rejectUnauthorized: false
+        });
+
+        const topicJSON = "SoilSystem";
+        const topicSprinklerLong = "SprinklerLong";
+        const topicRuntime = "Runtime";
+
+        const canvas = document.getElementById('moistureCanvas');
+        const ctx = canvas.getContext('2d');
+        const radius = canvas.width / 2 - 20;
+
+        const mqttStatusElem = document.getElementById('mqttStatus');
+        const pumpStatusElem = document.getElementById('pumpStatus');
+        const runtimeElem = document.getElementById('runtime');
+        const runtimeInput = document.getElementById('runtimeInput');
+
+        let currentMoisture = 0;
+        let targetMoisture = 0;
+
+        client.on('connect', () => {
+            mqttStatusElem.innerText = 'Connected';
+            mqttStatusElem.style.color = 'green';
+            client.subscribe(topicJSON);
+        });
+
+        client.on('close', () => {
+            mqttStatusElem.innerText = 'Disconnected';
+            mqttStatusElem.style.color = 'red';
+        });
+
+        client.on('offline', () => {
+            mqttStatusElem.innerText = 'Offline';
+            mqttStatusElem.style.color = 'orange';
+        });
+
+        client.on('error', () => {
+            mqttStatusElem.innerText = 'Error';
+            mqttStatusElem.style.color = 'red';
+        });
+
+        client.on('message', (topic, message) => {
+            if (topic === topicJSON) {
+                const data = JSON.parse(message.toString());
+                targetMoisture = data.moisture;
+                pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
+                runtimeElem.innerText = data.runtime;
+            }
+        });
+
+        function sendPump(state) {
+            client.publish(topicSprinklerLong, state.toString());
+        }
+
+        function sendRuntime() {
+            const val = parseInt(runtimeInput.value);
+            if (!isNaN(val) && val > 0) {
+                client.publish(topicRuntime, val.toString());
+                runtimeInput.value = '';
+                alert('Runtime sent: ' + val + ' sec');
+            } else {
+                alert('Enter a valid runtime in seconds');
+            }
+        }
+
+        function interpolateColor(color1, color2, factor) {
+            const result = color1.slice();
+            for (let i = 0; i < 3; i++) {
+                result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
+            }
+            return result;
+        }
+
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.slice(1), 16);
+            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+        }
+
+        const dryColor = hexToRgb("#a0522d");   // brown
+        const midColor = hexToRgb("#9acd32");   // yellow-green
+        const wetColor = hexToRgb("#1e90ff");   // blue
+
+        function getMoistureColor(value) {
+            if (value < 50) {
+                return interpolateColor(dryColor, midColor, value / 50);
+            } else {
+                return interpolateColor(midColor, wetColor, (value - 50) / 50);
+            }
+        }
+
+        function drawMoisture() {
+            const diff = targetMoisture - currentMoisture;
+            currentMoisture += diff * 0.05;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const angle = (currentMoisture / 100) * 2 * Math.PI;
+
+            const rgb = getMoistureColor(currentMoisture);
+            const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 30;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 30;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '26px Segoe UI';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(Math.round(currentMoisture) + '%', centerX, centerY);
+
+            requestAnimationFrame(drawMoisture);
+        }
+
+        drawMoisture();
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Service Worker registered"));
+        }
+    </script>
+</body>
+</html>
