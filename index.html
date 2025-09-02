@@ -136,31 +136,35 @@
     }
 
     /* ✅ Mobile view */
-     @media (max-width: 600px) {
-    .buttons {
-      flex-direction: column;
-      gap: 15px;
-    }
+    @media (max-width: 600px) {
+      .dashboard {
+        padding: 20px;
+      }
 
-    button#on,
-    button#off {
-      width: 100%;
-    }
+      .buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
 
-    .gauge-row {
-      flex-direction: column;
-    }
+      button#on,
+      button#off {
+        width: 100%;
+      }
 
-    /* ✅ Scale temp gauge in mobile mode */
-    #tempCanvas {
-      width: 180px !important;   /* match moisture gauge size */
-      height: 180px !important;
+      .gauge-row {
+        flex-direction: row; /* side by side */
+        gap: 15px;
+      }
+
+      .gauge-row > div {
+        flex: 1;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: auto;
+      }
     }
-    #moistureCanvas {
-      width: 180px !important;
-      height: 180px !important;
-    }
-  }
   </style>
 </head>
 <body>
