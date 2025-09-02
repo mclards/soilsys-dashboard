@@ -30,7 +30,7 @@
 
         h2 {
             color: #2c3e50;
-            margin-bottom: 25px;
+            margin-bottom: 40px;
             font-size: 28px;
             text-transform: uppercase;
         }
@@ -42,24 +42,30 @@
             color: #34495e;
         }
 
-        canvas {
-            display: block;
-            margin: 0 auto;
-        }
-
         .gauge-row {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
+            justify-content: space-evenly;
+            align-items: flex-start;
+            gap: 5px;
             margin-bottom: 20px;
             flex-wrap: wrap;
-            /* ✅ allow wrapping nicely on small screens */
         }
 
         .gauge-row>div {
-            flex: 1;
-            min-width: 140px;
+            text-align: center;
+        }
+
+        .moisture-canvas,
+        .temp-canvas {
+            height: 250px;
+        }
+
+        .moisture-canvas {
+            width: 250px;
+        }
+
+        .temp-canvas {
+            width: 80px;
         }
 
         .status {
@@ -109,8 +115,7 @@
             margin-top: 40px;
         }
 
-        button#on,
-        button#off {
+        button#sprinklerBtn {
             padding: 15px 30px;
             border: none;
             border-radius: 12px;
@@ -119,25 +124,19 @@
             cursor: pointer;
             color: #fff;
             flex: 1;
-        }
-
-        button#on {
             background-color: #27ae60;
         }
 
-        button#on:hover {
-            background-color: #2ecc71;
+        button#sprinklerBtn:hover {
+            opacity: 0.9;
         }
 
-        button#off {
-            background-color: #c0392b;
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
         }
 
-        button#off:hover {
-            background-color: #e74c3c;
-        }
-
-        /* ✅ Mobile view */
         @media (max-width: 600px) {
             .dashboard {
                 padding: 20px;
@@ -148,47 +147,47 @@
                 gap: 15px;
             }
 
-            button#on,
-            button#off {
-                width: 90%;
+            button#sprinklerBtn {
+                width: 100%;
             }
 
             .gauge-row {
                 flex-direction: row;
-                /* side by side */
-                gap: 0px;
+                gap: 5px;
             }
 
-            .gauge-row>div {
-                flex: 1;
+            .moisture-canvas,
+            .temp-canvas {
+                height: 200px;
             }
 
-            canvas {
-                max-width: 100%;
-                width: 150px;
-                height: 150px;
+            .moisture-canvas {
+                width: 200px;
             }
 
+            .temp-canvas {
+                width: 60px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="dashboard">
-        <h2>SOIL MOISTURE DASHBOARD</h2>
-
+        <h2>SOIL-SYS DASHBOARD</h2>
         <div class="gauge-row">
             <div>
-                <canvas id="moistureCanvas" width="250" height="250"></canvas>
+                <canvas id="moistureCanvas" class="moisture-canvas" width="250" height="250"></canvas>
                 <div class="bar-title">Moisture</div>
             </div>
             <div>
-                <canvas id="tempCanvas" width="100" height="250"></canvas>
+                <canvas id="tempCanvas" class="temp-canvas" width="100" height="270"></canvas>
                 <div class="bar-title">Temperature</div>
             </div>
         </div>
 
         <div class="status">
+            <div>System Status: <span id="systemStatus" style="color:blue">Unknown</span></div>
             <div>Server Status: <span id="mqttStatus" style="color:red">Disconnected</span></div>
             <div>Sprinkler Status: <span id="pumpStatus">OFF</span></div>
             <div>Runtime: <span id="runtime">0</span> sec</div>
@@ -201,9 +200,12 @@
         </div>
 
         <div class="buttons">
-            <button id="on" onclick="sendPump(1)">Sprinkler ON</button>
-            <button id="off" onclick="sendPump(0)">Sprinkler OFF</button>
+            <button id="sprinklerBtn">SPRINKLER</button>
         </div>
+
+        <footer>
+            © 2025 Created by Engr. Clariden Montaño
+        </footer>
     </div>
 
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -219,17 +221,13 @@
         });
 
         const topicJSON = "SoilSystem";
+        const topicSprinkler = "Sprinkler";
         const topicSprinklerLong = "SprinklerLong";
         const topicRuntime = "Runtime";
-
-        const canvas = document.getElementById('moistureCanvas');
-        const ctx = canvas.getContext('2d');
-        const radius = canvas.width / 2 - 20;
-
-        const tempCanvas = document.getElementById('tempCanvas');
-        const tctx = tempCanvas.getContext('2d');
+        const topicLastWill = "Lastwill"; // ✅ ESP32 LastWill
 
         const mqttStatusElem = document.getElementById('mqttStatus');
+        const systemStatusElem = document.getElementById('systemStatus');
         const pumpStatusElem = document.getElementById('pumpStatus');
         const runtimeElem = document.getElementById('runtime');
         const runtimeInput = document.getElementById('runtimeInput');
@@ -237,10 +235,15 @@
         let currentMoisture = 0, targetMoisture = 0;
         let currentTemp = 0, targetTemp = 0;
 
+        let sprinklerState = 0;
+        let pressTimer = null;
+        let longPressActive = false;
+
         client.on('connect', () => {
             mqttStatusElem.innerText = 'Connected';
             mqttStatusElem.style.color = 'green';
             client.subscribe(topicJSON);
+            client.subscribe(topicLastWill); // ✅ Subscribe to LastWill
         });
 
         client.on('close', () => {
@@ -266,11 +269,17 @@
                 pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
                 runtimeElem.innerText = data.runtime;
             }
-        });
+            if (topic === topicLastWill) {
+                if (message.toString() === "System Online") {
+                    systemStatusElem.innerText = "Online";
+                    systemStatusElem.style.color = "green";
+                } else {
+                    systemStatusElem.innerText = "Offline";
+                    systemStatusElem.style.color = "red";
+                }
+            }
 
-        function sendPump(state) {
-            client.publish(topicSprinklerLong, state.toString());
-        }
+        });
 
         function sendRuntime() {
             const val = parseInt(runtimeInput.value);
@@ -282,6 +291,51 @@
                 alert('Enter a valid runtime in seconds');
             }
         }
+
+        // ✅ Sprinkler Button with Long Press Detection
+        const sprinklerBtn = document.getElementById("sprinklerBtn");
+
+        function startPress(e) {
+            e.preventDefault();
+            pressTimer = setTimeout(() => {
+                longPressActive = true;
+                client.publish(topicSprinklerLong, "1");
+                sprinklerBtn.innerText = "HOLDING…";
+                sprinklerBtn.style.backgroundColor = "#e67e22";
+            }, 600);
+        }
+
+        function endPress(e) {
+            e.preventDefault();
+            if (pressTimer) clearTimeout(pressTimer);
+
+            if (longPressActive) {
+                client.publish(topicSprinklerLong, "0");
+                sprinklerBtn.innerText = "SPRINKLER";
+                sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
+                longPressActive = false;
+            } else {
+                sprinklerState = sprinklerState === 0 ? 1 : 0;
+                client.publish(topicSprinkler, sprinklerState.toString());
+                pumpStatusElem.innerText = sprinklerState ? "ON" : "OFF";
+                sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
+            }
+        }
+
+        sprinklerBtn.addEventListener("mousedown", startPress);
+        sprinklerBtn.addEventListener("mouseup", endPress);
+        sprinklerBtn.addEventListener("mouseleave", endPress);
+
+        sprinklerBtn.addEventListener("touchstart", startPress, { passive: false });
+        sprinklerBtn.addEventListener("touchend", endPress, { passive: false });
+
+        // Gauges
+        const canvas = document.getElementById('moistureCanvas');
+        const ctx = canvas.getContext('2d');
+        const radius = canvas.width / 2 - 20;
+
+        const tempCanvas = document.getElementById('tempCanvas');
+        const tctx = tempCanvas.getContext('2d');
 
         function interpolateColor(color1, color2, factor) {
             const result = color1.slice();
@@ -348,21 +402,22 @@
 
             tctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-            const gradient = tctx.createLinearGradient(0, tempCanvas.height, 0, 0);
+            const gradient = tctx.createLinearGradient(0, tempCanvas.height - 20, 0, 0);
             gradient.addColorStop(0, "blue");
             gradient.addColorStop(1, "red");
 
             tctx.fillStyle = "#eee";
-            tctx.fillRect(30, 0, 40, tempCanvas.height);
+            tctx.fillRect(30, 0, 40, tempCanvas.height - 20);
 
-            const fillHeight = (currentTemp / 50) * tempCanvas.height;
+            const fillHeight = (currentTemp / 50) * (tempCanvas.height - 20);
             tctx.fillStyle = gradient;
-            tctx.fillRect(30, tempCanvas.height - fillHeight, 40, fillHeight);
+            tctx.fillRect(30, (tempCanvas.height - 20) - fillHeight, 40, fillHeight);
 
             tctx.fillStyle = "#111";
             tctx.font = "bold 16px Segoe UI";
             tctx.textAlign = "center";
-            tctx.fillText(Math.round(currentTemp) + "°C", 50, tempCanvas.height - fillHeight - 15);
+            tctx.textBaseline = "top";
+            tctx.fillText(Math.round(currentTemp) + "°C", tempCanvas.width / 2, tempCanvas.height - 18);
 
             requestAnimationFrame(drawTemp);
         }
