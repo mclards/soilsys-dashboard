@@ -72,14 +72,20 @@
             /* ✅ match baseline */
         }
 
-        .status {
-            margin-bottom: 25px;
-            font-size: 18px;
-            color: #2c3e50;
+        .status-label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .status-value {
+            font-size: 14px;
         }
 
         .status div {
-            margin-bottom: 6px;
+            margin-bottom: 2px;
+            /* was 6px */
+            line-height: 1.2;
+            /* tighter vertical spacing */
         }
 
         .input-group {
@@ -168,12 +174,6 @@
                 /* ✅ keep leveled in mobile too */
             }
 
-            .gauge-row>div:last-child .bar-title {
-                margin-left: -20px;
-                font-size: 20px;
-                /* slightly less shift on smaller screens */
-            }
-
             .moisture-canvas {
                 width: 180px;
                 height: 180px;
@@ -182,6 +182,11 @@
             .temp-canvas {
                 width: 70px;
                 height: 180px;
+            }
+
+            .gauge-row .bar-title {
+                font-size: 16px;
+                /* was 105px in your code, looks like a typo! */
             }
         }
     </style>
@@ -202,12 +207,24 @@
         </div>
 
         <div class="status">
-            <div>System Status: <span id="systemStatus" style="color:blue">Unknown</span></div>
-            <div>Server Status: <span id="mqttStatus" style="color:red">Disconnected</span></div>
-            <div>Sprinkler Status: <span id="pumpStatus">OFF</span></div>
-            <div>Runtime: <span id="runtime">0</span> sec</div>
-            <div>Client ID: <span id="clientIdText"></span></div>
+            <div><span class="status-label">System Status:</span>
+                <span id="systemStatus" class="status-value" style="color:blue;">Unknown</span>
+            </div>
+            <div><span class="status-label">Server Status:</span>
+                <span id="mqttStatus" class="status-value" style="color:red;">Disconnected</span>
+            </div>
+            <div><span class="status-label">Sprinkler Status:</span>
+                <span id="pumpStatus" class="status-value">OFF</span>
+            </div>
+            <div><span class="status-label">Runtime:</span>
+                <span id="runtime" class="status-value">0</span> sec
+            </div>
+            <div><span class="status-label">Client ID:</span>
+                <span id="clientIdText" class="status-value"></span>
+            </div>
         </div>
+
+        <br></br>
 
         <div class="input-group">
             <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
