@@ -62,9 +62,9 @@ Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926" alt="Mobile App (APK)" width="250" />
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" alt="Web Dashboard (Desktop)" width="600" />
-  &nbsp;&nbsp;&nbsp;
   <img src="https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d" alt="Web Dashboard (Mobile PWA)" width="250" />
+   &nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" alt="Web Dashboard (Desktop)" width="600" />
 </p>
 
 ---
