@@ -188,7 +188,7 @@
       pressTimer = setTimeout(() => {
         if (!isPointerDown) return;        // guard: was released/cancelled
         longPressActive = true;
-        client.publish(topicSprinklerLong, "1", { retain: true });
+        client.publish(topicSprinklerLong, "1", { retain: false });
         sprinklerBtn.innerText = "HOLDING…";
         sprinklerBtn.style.backgroundColor = "#e67e22";
       }, LONG_MS);
@@ -201,14 +201,14 @@
 
       if (longPressActive) {
         // release the long hold
-        client.publish(topicSprinklerLong, "0", { retain: true });
+        client.publish(topicSprinklerLong, "0", { retain: false });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       } else {
         // short click: toggle sprinkler
         sprinklerState = 1;
-        client.publish(topicSprinkler, sprinklerState.toString(), { retain: true });
+        client.publish(topicSprinkler, sprinklerState.toString(), { retain: false });
         pumpStatusElem.innerText = sprinklerState ? "ON" : "OFF";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       }
@@ -222,7 +222,7 @@
 
       // if we had already started a hold, ensure it's released
       if (longPressActive) {
-        client.publish(topicSprinklerLong, "0", { retain: true });
+        client.publish(topicSprinklerLong, "0", { retain: false });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
@@ -330,3 +330,4 @@
   </script>
 </body>
 </html>
+
