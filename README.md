@@ -26,13 +26,13 @@ Users can also set pump runtime, manually switch the pump ON/OFF, and install th
 
 ## 📷 Screenshots
 Mobile App
-- ![app](https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926)
+![app](https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926)
 
 Webserver (Desktop)
-- <img width="1910" height="919" alt="web" src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" />
+<img width="1910" height="919" alt="web" src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" />
 
 Webserver (Mobile)
-- ![mobile](https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d)
+![mobile](https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d)
 
 ---
 
