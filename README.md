@@ -88,15 +88,24 @@ Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to 
 
 ---
 
-## 👨‍💻 Creator
+## 👨‍💻 Creator  
 
-**Engr. Clariden Montaño**
-Licensed Electrical Engineer ⚡ | IoT & Arduino Developer 🤖 | Web Programming Enthusiast 💻
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/00000000?v=4" alt="Clariden Montaño" width="150" style="border-radius:50%;" />
+</p>
 
-📌 Interests:
+<p align="center">
+  <b>Engr. Clariden Montaño</b><br/>
+  Licensed Electrical Engineer ⚡<br/>
+  IoT & Arduino Developer 🤖<br/>
+  Web Programming Enthusiast 💻
+</p>
 
-* IoT systems (ESP32, Arduino, MQTT)
-* Electricity & Electronics
-* Web technologies (HTML, CSS, JavaScript)
+---
+
+📌 **Interests:**  
+- IoT systems (ESP32, Arduino, MQTT)  
+- Electricity & Electronics  
+- Web technologies (HTML, CSS, JavaScript)  
 
 ---
