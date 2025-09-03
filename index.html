@@ -123,8 +123,6 @@
 
     let currentMoisture = 0, targetMoisture = 0;
     let currentTemp = 0, targetTemp = 0;
-
-    // sprinkler UI state
     let sprinklerState = 0;
 
     client.on('connect', () => {
@@ -132,7 +130,6 @@
       mqttStatusElem.style.color = 'green';
       client.subscribe(topicJSON);
       client.subscribe(topicLastWill);
-      // optional: subscribe to Sprinkler to sync button with device
       client.subscribe(topicSprinkler);
     });
 
@@ -156,7 +153,6 @@
           systemStatusElem.style.color = "red";
         }
       } else if (topic === topicSprinkler) {
-        // keep button color in sync if other clients toggle it
         const v = parseInt(message.toString(), 10) || 0;
         sprinklerState = v ? 1 : 0;
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
@@ -173,8 +169,7 @@
         alert('Enter a valid runtime in seconds');
       }
     }
-
-    // ---------- Robust press/hold using Pointer Events ----------
+    
     const sprinklerBtn = document.getElementById("sprinklerBtn");
     const LONG_MS = 600;
 
@@ -189,7 +184,7 @@
 
       clearTimeout(pressTimer);
       pressTimer = setTimeout(() => {
-        if (!isPointerDown) return;        // guard: was released/cancelled
+        if (!isPointerDown) return;    
         longPressActive = true;
         client.publish(topicSprinklerLong, "1", { retain: false });
         sprinklerBtn.innerText = "HOLDING…";
@@ -198,18 +193,16 @@
     }
 
     function endPress(e) {
-      if (!isPointerDown) return;          // ignore hover/stray events
+      if (!isPointerDown) return;  
       e.preventDefault();
       clearTimeout(pressTimer);
 
       if (longPressActive) {
-        // release the long hold
         client.publish(topicSprinklerLong, "0", { retain: false });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       } else {
-        // short click: toggle sprinkler
         sprinklerState = 1;
         client.publish(topicSprinkler, sprinklerState.toString(), { retain: false });
         pumpStatusElem.innerText = sprinklerState ? "ON" : "OFF";
@@ -223,7 +216,6 @@
       clearTimeout(pressTimer);
       isPointerDown = false;
 
-      // if we had already started a hold, ensure it's released
       if (longPressActive) {
         client.publish(topicSprinklerLong, "0", { retain: false });
         longPressActive = false;
@@ -232,14 +224,12 @@
       }
     }
 
-    // Use only pointer events (prevents double mouse+touch firing)
     sprinklerBtn.addEventListener("pointerdown", startPress);
     sprinklerBtn.addEventListener("pointerup", endPress);
     sprinklerBtn.addEventListener("pointerleave", () => { if (isPointerDown) endPress(new Event('pointerup')); });
     sprinklerBtn.addEventListener("pointercancel", cancelPress);
-    sprinklerBtn.oncontextmenu = (e) => e.preventDefault(); // stop long-press menu on mobile
+    sprinklerBtn.oncontextmenu = (e) => e.preventDefault(); 
 
-    // ---------- Gauges ----------
     const canvas = document.getElementById('moistureCanvas');
     const ctx = canvas.getContext('2d');
     const radius = canvas.width / 2 - 20;
@@ -333,5 +323,6 @@
   </script>
 </body>
 </html>
+
 
 
