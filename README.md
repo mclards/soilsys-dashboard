@@ -25,30 +25,30 @@ Users can also set pump runtime, manually switch the pump ON/OFF, and install th
 ---
 
 ## 📷 Screenshots
-**Mobile App**
-![app](https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926)
 
-**Webserver (Desktop)**
-<img width="1910" height="919" alt="web" src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" />
-
-**Webserver (Mobile)**
-![mobile](https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926" alt="Mobile App" width="250" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" alt="Webserver Desktop" width="600" />
+  &nbsp;&nbsp;&nbsp;
+  <img src="https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d" alt="Webserver Mobile" width="250" />
+</p>
 
 ---
 
 ## 📦 Installation
 
-A. Mobile App
-- Download and Install the APK file from:
-  👉 https://mega.nz/file/chgkXKBL#29QF_Ri0DMSACECaB2mV9OnT4SDXPvNA8rJ3IKS58CA
+### A. Mobile App
+- Download and Install the APK file from:  
+  👉 [Download APK](https://mega.nz/file/chgkXKBL#29QF_Ri0DMSACECaB2mV9OnT4SDXPvNA8rJ3IKS58CA)
 
-B. Werserver
-   1. Open the app in your browser:  
-      👉 https://mclards.github.io/soilsys-dashboard/
+### B. Webserver
+1. Open the app in your browser:  
+   👉 [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)
 
-   2. Your browser will prompt **"Install App"**.  
-      - On **Android**: Add to Home Screen  
-      - On **Desktop (Chrome/Edge)**: Install as native app  
+2. Your browser will prompt **"Install App"**.  
+   - On **Android**: Add to Home Screen  
+   - On **Desktop (Chrome/Edge)**: Install as native app  
 
 ---
 
