@@ -61,12 +61,3 @@ Licensed Electrical Engineer ⚡ | IoT & Arduino Developer 🤖 | Web Programmin
 - IoT systems (ESP32, Arduino, MQTT)  
 - Web technologies (HTML, CSS, JavaScript)  
 
----
-
-## 🤝 Contribution
-Feel free to fork this project, suggest improvements, or report issues. Collaboration is welcome!
-
----
-
-## 📄 License
-This project is open-source under the **MIT License**.
