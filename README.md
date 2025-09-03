@@ -1,63 +1,102 @@
-# 🌱 Soil Moisture Dashboard (PWA)
+# 🌱 Soil Moisture Dashboard
 
-A Progressive Web App (PWA) for **real-time soil moisture monitoring and pump control**.  
-This app connects to an **MQTT broker** and displays moisture readings using a smooth color-gradient gauge (dry → wet).  
-Users can also set pump runtime, manually switch the pump ON/OFF, and install this app like a native application on desktop or mobile.
+The **Soil Moisture Dashboard** is an IoT project for **real-time soil monitoring and smart sprinkler control**.
+It works in **two ways**:
+
+1. 📱 As a **Mobile App (APK)** – installable directly on Android phones.
+2. 🌐 As a **Progressive Web App (PWA)** – installable on any device (desktop, Android, iOS) through the browser.
+
+Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to fetch soil and temperature readings, and to control the sprinkler remotely.
 
 ---
 
 ## 🚀 Features
-- 📊 Real-time soil moisture gauge with gradient visualization (dry → wet)
-- ⚡ Pump control (ON/OFF) via MQTT
-- ⏱️ Adjustable pump runtime input
-- 🔔 MQTT connection status indicator
-- 📱 Installable as a PWA (works offline once loaded)
-- 🌐 Hosted on GitHub Pages
+
+* 📊 **Soil moisture gauge** with smooth gradient (dry → wet)
+* 🌡️ **Temperature bar display**
+* ⚡ **Sprinkler control**: toggle ON/OFF or hold with long press
+* ⏱️ **Custom runtime setting** for sprinkler activation
+* 🔔 **System & MQTT connection indicators**
+* 📱 **Two deployment options**:
+
+  * Native-like **Mobile App (APK)**
+  * Installable **Web Dashboard (PWA)**
+* 🌐 Lightweight hosting via **GitHub Pages**
 
 ---
 
 ## 🛠️ Technology Stack
-- **HTML, CSS, JavaScript** (frontend)
-- **MQTT.js** for broker communication
-- **Service Worker + Manifest** for PWA functionality
-- **GitHub Pages** for free hosting
+
+* **Hardware:** ESP32 (sensor readings + sprinkler control)
+* **App:** HTML, CSS, JavaScript
+* **Communication:** MQTT.js over WebSocket
+* **Broker:** HiveMQ Cloud
+* **Deployment:**
+
+  * Mobile App – packaged as **APK**
+  * Web App – **PWA** with Service Worker + Manifest
+
+---
+
+## 🔄 How It Works
+
+1. **ESP32 Microcontroller**
+
+   * Reads soil moisture & temperature
+   * Publishes data to the **MQTT broker**
+   * Listens for commands to control the **sprinkler**
+
+2. **MQTT Broker**
+
+   * Middle layer between ESP32 and app (message exchange)
+
+3. **Dashboard (Mobile App or PWA)**
+
+   * Displays real-time sensor data
+   * Sends sprinkler commands (ON/OFF, runtime, hold)
 
 ---
 
 ## 📷 Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926" alt="Mobile App" width="250" />
+  <img src="https://github.com/user-attachments/assets/32e81c14-8fe5-42d2-9e2a-d27e03efa926" alt="Mobile App (APK)" width="250" />
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" alt="Webserver Desktop" width="600" />
+  <img src="https://github.com/user-attachments/assets/ffdb51e4-82c2-4ee4-962f-be2bcfffa8f8" alt="Web Dashboard (Desktop)" width="600" />
   &nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d" alt="Webserver Mobile" width="250" />
+  <img src="https://github.com/user-attachments/assets/f2d54dc7-aeec-4afc-a4b1-a28ba8f0bb1d" alt="Web Dashboard (Mobile PWA)" width="250" />
 </p>
 
 ---
 
 ## 📦 Installation
 
-### A. Mobile App
-- Download and Install the APK file from:  
-  👉 [Download APK](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)
+### 📱 Mobile App (APK)
 
-### B. Webserver
-1. Open the app in your browser:  
+* Download and install:
+  👉 [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)
+
+### 🌐 Web Dashboard (PWA)
+
+1. Open in your browser:
    👉 [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)
 
-2. Your browser will prompt **"Install App"**.  
-   - On **Android**: Add to Home Screen  
-   - On **Desktop (Chrome/Edge)**: Install as native app  
+2. Install prompt:
+
+   * On **Android/iOS** → *Add to Home Screen*
+   * On **Desktop (Chrome/Edge)** → *Install as App*
 
 ---
 
 ## 👨‍💻 Creator
-**Engr. Clariden Montaño**  
-Licensed Electrical Engineer ⚡ | IoT & Arduino Developer 🤖 | Web Programming Enthusiast 💻  
 
-📌 Interests:  
-- Electricity & Electronics  
-- IoT systems (ESP32, Arduino, MQTT)  
-- Web technologies (HTML, CSS, JavaScript)  
+**Engr. Clariden Montaño**
+Licensed Electrical Engineer ⚡ | IoT & Arduino Developer 🤖 | Web Programming Enthusiast 💻
 
+📌 Interests:
+
+* IoT systems (ESP32, Arduino, MQTT)
+* Electricity & Electronics
+* Web technologies (HTML, CSS, JavaScript)
+
+---
