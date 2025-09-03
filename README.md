@@ -40,7 +40,7 @@ Users can also set pump runtime, manually switch the pump ON/OFF, and install th
 
 ### A. Mobile App
 - Download and Install the APK file from:  
-  👉 [Download APK](https://github.com/mclards/soilsys-dashboard/blob/main/SoilSysApp.apk)
+  👉 [Download APK](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)
 
 ### B. Webserver
 1. Open the app in your browser:  
