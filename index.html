@@ -91,9 +91,10 @@
       text-transform: uppercase;
       margin-bottom: 0px;
     }
+
     h2 {
       color: #000000;
-      text-align:center;
+      text-align: center;
       margin-top: 0;
       margin-bottom: 40px;
       font-size: 28px;
@@ -273,27 +274,28 @@
     </div>
 
     <div class="status">
-  <div><span class="status-label">System Status:</span> <span id="systemStatus" class="status-value"
-      style="color:blue;">Unknown</span></div>
-  <div><span class="status-label">Server Status:</span> <span id="mqttStatus" class="status-value"
-      style="color:red;">Disconnected</span></div>
-  <div><span class="status-label">Sprinkler Status:</span> <span id="pumpStatus" class="status-value">OFF</span></div>
-  <div><span class="status-label">Runtime:</span> <span id="runtime" class="status-value">0</span> sec</div>
-  <div><span class="status-label">Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
-  <div><span class="status-label">Client ID:</span> <span id="clientIdText" class="status-value"></span></div>
-</div>
+      <div><span class="status-label">System Status:</span> <span id="systemStatus" class="status-value"
+          style="color:blue;">Unknown</span></div>
+      <div><span class="status-label">Server Status:</span> <span id="mqttStatus" class="status-value"
+          style="color:red;">Disconnected</span></div>
+      <div><span class="status-label">Sprinkler Status:</span> <span id="pumpStatus" class="status-value">OFF</span>
+      </div>
+      <div><span class="status-label">Runtime:</span> <span id="runtime" class="status-value">0</span> sec</div>
+      <div><span class="status-label">Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
+      <div><span class="status-label">Client ID:</span> <span id="clientIdText" class="status-value"></span></div>
+    </div>
 
-<br />
+    <br />
 
-<div class="input-group">
-  <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
-  <button class="send" onclick="sendRuntime()">Send</button>
-</div>
+    <div class="input-group">
+      <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
+      <button class="send" onclick="sendRuntime()">Send</button>
+    </div>
 
-<div class="input-group">
-  <input type="number" id="thresholdInput" placeholder="Threshold (%)">
-  <button class="send" onclick="sendThreshold()">Send</button>
-</div>
+    <div class="input-group">
+      <input type="number" id="thresholdInput" placeholder="Threshold (%)">
+      <button class="send" onclick="sendThreshold()">Send</button>
+    </div>
 
     <div class="buttons">
       <button id="sprinklerBtn">SPRINKLER</button>
@@ -339,8 +341,8 @@
 
     const topicThreshold = "Threshold"; // NEW
 
-const thresholdElem = document.getElementById('thresholdVal');
-const thresholdInput = document.getElementById('thresholdInput');
+    const thresholdElem = document.getElementById('thresholdVal');
+    const thresholdInput = document.getElementById('thresholdInput');
 
     const mqttStatusElem = document.getElementById('mqttStatus');
     const systemStatusElem = document.getElementById('systemStatus');
@@ -361,7 +363,7 @@ const thresholdInput = document.getElementById('thresholdInput');
       client.subscribe(topicLastWill);
       // optional: subscribe to Sprinkler to sync button with device
       client.subscribe(topicSprinkler);
-  client.subscribe(topicThreshold); // NEW
+      client.subscribe(topicThreshold); // NEW
     });
 
     client.on('close', () => { mqttStatusElem.innerText = 'Disconnected'; mqttStatusElem.style.color = 'red'; });
@@ -375,7 +377,7 @@ const thresholdInput = document.getElementById('thresholdInput');
         targetTemp = data.temperature;
         pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
         runtimeElem.innerText = data.runtime;
-    thresholdElem.innerText = data.threshold; // NEW
+        thresholdElem.innerText = data.threshold; // NEW
       } else if (topic === topicLastWill) {
         if (message.toString() === "System Online") {
           systemStatusElem.innerText = "Online";
@@ -404,15 +406,15 @@ const thresholdInput = document.getElementById('thresholdInput');
     }
 
     function sendThreshold() {
-  const val = parseInt(thresholdInput.value);
-  if (!isNaN(val) && val > 0 && val <= 100) {
-    client.publish(topicThreshold, val.toString(), { retain: true });
-    thresholdInput.value = '';
-    alert('Threshold sent: ' + val + '%');
-  } else {
-    alert('Enter a valid threshold (1-100%)');
-  }
-}
+      const val = parseInt(thresholdInput.value);
+      if (!isNaN(val) && val > 0 && val <= 100) {
+        client.publish(topicThreshold, val.toString(), { retain: true });
+        thresholdInput.value = '';
+        alert('Threshold sent: ' + val + '%');
+      } else {
+        alert('Enter a valid threshold (1-100%)');
+      }
+    }
 
     // ---------- Robust press/hold using Pointer Events ----------
     const sprinklerBtn = document.getElementById("sprinklerBtn");
@@ -574,4 +576,3 @@ const thresholdInput = document.getElementById('thresholdInput');
 </body>
 
 </html>
-
