@@ -150,8 +150,7 @@
 
     .input-group {
       margin-bottom: 10px;
-      line-height: 1.2
-      em;
+      line-height: 1.2 em;
     }
 
     input {
@@ -398,10 +397,23 @@
       const val = parseInt(runtimeInput.value);
       if (!isNaN(val) && val > 0) {
         client.publish(topicRuntime, val.toString(), { retain: true });
+        runtimeElem.innerText = val;
         runtimeInput.value = '';
-        alert('Runtime sent: ' + val + ' sec');
+        systemStatusElem.innerText = `Runtime set to ${val}s`;
+        systemStatusElem.style.color = "blue";
+
+        // revert to lastwill after 2s
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
       } else {
-        alert('Enter a valid runtime in seconds');
+        systemStatusElem.innerText = "Invalid runtime input";
+        systemStatusElem.style.color = "red";
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
       }
     }
 
@@ -409,12 +421,26 @@
       const val = parseInt(thresholdInput.value);
       if (!isNaN(val) && val > 0 && val <= 100) {
         client.publish(topicThreshold, val.toString(), { retain: true });
+        thresholdElem.innerText = val;
         thresholdInput.value = '';
-        alert('Threshold sent: ' + val + '%');
+        systemStatusElem.innerText = `Threshold set to ${val}%`;
+        systemStatusElem.style.color = "blue";
+
+        // revert to lastwill after 2s
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
       } else {
-        alert('Enter a valid threshold (1-100%)');
+        systemStatusElem.innerText = "Invalid threshold input (1–100%)";
+        systemStatusElem.style.color = "red";
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
       }
     }
+
 
     // ---------- Robust press/hold using Pointer Events ----------
     const sprinklerBtn = document.getElementById("sprinklerBtn");
