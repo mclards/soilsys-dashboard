@@ -43,11 +43,15 @@
 
     .modal-content {
       background-color: #fff;
-      margin: 15% auto;
+      margin: 5% auto;
       padding: 20px;
       border-radius: 12px;
-      width: 320px;
-      text-align: center;
+      width: 360px;
+      max-height: 80vh;
+      /* limit height to viewport */
+      overflow-y: auto;
+      /* scroll inside modal only */
+      text-align: left;
       font-size: 14px;
       line-height: 1.5;
     }
@@ -304,7 +308,49 @@
   <div id="aboutModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <p>© 2025 Created by Engr. Clariden Montaño</p>
+      <h2 style="text-align:center; margin-bottom:10px;">User Guide</h2>
+      <hr>
+
+      <h3>🌱 System Overview</h3>
+      <p>
+        The Soil Monitoring System measures <b>soil moisture</b> and <b>temperature</b>,
+        and controls a <b>sprinkler pump</b> either automatically or manually.
+        Data is displayed on this dashboard and synchronized through <b>IoT</b>.
+      </p>
+
+      <h3>📊 Dashboard Features</h3>
+      <ul>
+        <li><b>Moisture Gauge:</b> Current soil moisture (%)</li>
+        <li><b>Temperature Bar:</b> Current soil temperature (°C)</li>
+        <li><b>System Status:</b> Device Online / Offline</li>
+        <li><b>Server Status:</b> IoT connection Connected / Disconnected</li>
+        <li><b>Sprinkler Status:</b> Pump ON / OFF</li>
+        <li><b>Runtime:</b> Duration the pump runs (sec)</li>
+        <li><b>Threshold:</b> Moisture % where watering stops</li>
+        <li><b>Client ID:</b> Current web client identifier</li>
+      </ul>
+
+      <h3>🎛 Controls</h3>
+      <ul>
+        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i></li>
+        <li><b>Threshold Input:</b> Enter % (1–100) → <i>Send</i></li>
+        <li><b>Sprinkler Button:</b><br>
+          • Short press → toggle ON/OFF (auto mode)<br>
+          • Hold → manual override (stays ON until released)
+        </li>
+      </ul>
+
+      <h3>🔘 Device Button (on ESP32)</h3>
+      <ul>
+        <li><b>1 click:</b> Toggle pump (auto mode)</li>
+        <li><b>Long press:</b> Enable / disable manual override</li>
+        <li><b>5 quick clicks:</b> Reset WiFi credentials → starts AP mode on reboot</li>
+      </ul>
+
+      <hr>
+      <p style="text-align:center; margin-top:10px; font-size:13px; color:#555;">
+        © 2025 Created by Engr. Clariden Montaño
+      </p>
     </div>
   </div>
 
