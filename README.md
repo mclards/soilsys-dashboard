@@ -1,59 +1,94 @@
-# 🌱 Soil Moisture Dashboard
+# 🌱 Soil Moisture Dashboard (IoT Project)
 
-The **Soil Moisture Dashboard** is an IoT project for **real-time soil monitoring and smart sprinkler control**.
-It works in **two ways**:
+The **Soil Moisture Dashboard** is an **Internet of Things (IoT)** project for **real-time soil monitoring and smart sprinkler control**.  
+At its core is an **ESP32 microcontroller** connected to soil and temperature sensors, communicating through the **MQTT protocol** (a lightweight IoT messaging system).  
 
-1. 📱 As a **Mobile App (APK)** – installable directly on Android phones.
-2. 🌐 As a **Progressive Web App (PWA)** – installable on any device (desktop, Android, iOS) through the browser.
+You can access the system in three ways:  
+1. 📱 As a **Mobile App (APK)** – installable directly on Android phones.  
+2. 💻 As a **Windows Executable (.exe)** – installable desktop program.  
+3. 🌐 As a **Progressive Web App (PWA)** – accessible through any modern browser.  
 
-Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to fetch soil and temperature readings, and to control the sprinkler remotely.
+---
+
+## 📥 Releases
+
+- 📱 **Android App (APK):** [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)  
+- 💻 **Windows Executable (.exe):** [SoilSysDashboard.Setup.exe](https://github.com/mclards/soilsys-dashboard/releases/download/v5.1/SoilSysDashboard.Setup.exe)  
+- 🌐 **Web Dashboard (PWA):** [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)  
 
 ---
 
 ## 🚀 Features
 
-* 📊 **Soil moisture gauge** with smooth gradient (dry → wet)
-* 🌡️ **Temperature bar display**
-* ⚡ **Sprinkler control**: toggle ON/OFF or hold with long press
-* ⏱️ **Custom runtime setting** for sprinkler activation
-* 🔔 **System & MQTT connection indicators**
-* 📱 **Two deployment options**:
+### 📊 IoT Dashboard Display
+- **Soil Moisture Gauge** → live % reading from sensor  
+- **Temperature Bar** → real-time soil temperature (°C)  
+- **System Status** → ESP32 device online/offline  
+- **Server Status** → IoT broker connected/disconnected  
+- **Sprinkler Status** → Pump ON / OFF feedback  
+- **Runtime Display** → how long the pump runs (sec)  
+- **Threshold Value** → soil moisture % where watering stops  
+- **Client ID** → identifies each connected client in the IoT network  
 
-  * Native-like **Mobile App (APK)**
-  * Installable **Web Dashboard (PWA)**
-* 🌐 Lightweight hosting via **GitHub Pages**
+### 🎛 Remote Controls (via App / Dashboard)
+- **Runtime Input** → set pump runtime (seconds)  
+- **Threshold Input** → set moisture stop % (1–100%)  
+- **Sprinkler Button**  
+  - Short press → toggle pump ON/OFF (auto mode)  
+  - Long hold → manual override (keeps ON while held)  
 
----
-
-## 🛠️ Technology Stack
-
-* **Hardware:** ESP32 (sensor readings + sprinkler control)
-* **App:** HTML, CSS, JavaScript
-* **Communication:** MQTT.js over WebSocket
-* **Broker:** HiveMQ Cloud
-* **Deployment:**
-
-  * Mobile App – packaged as **APK**
-  * Web App – **PWA** with Service Worker + Manifest
+### 🔘 Local Controls (on ESP32 Device Button)
+- **1 click** → toggle pump (auto mode)  
+- **Long press** → enable/disable manual override  
+- **5 quick clicks** → reset WiFi credentials (ESP32 enters AP setup mode)  
 
 ---
 
-## 🔄 How It Works
+## 🛠️ IoT Technology Stack
 
-1. **ESP32 Microcontroller**
+- **Hardware:** ESP32 microcontroller with soil & temperature sensors  
+- **Connectivity:** WiFi-enabled ESP32 → MQTT broker  
+- **Communication:** MQTT (Message Queuing Telemetry Transport) → lightweight IoT messaging protocol  
+- **Apps:** HTML, CSS, JavaScript dashboards (PWA, APK, Windows .exe)  
+- **Broker Service:** HiveMQ Cloud (IoT message exchange)  
+- **Deployment:**  
+  - Android App (**APK**)  
+  - Windows Desktop App (**.exe**)  
+  - Installable **Web Dashboard (PWA)** via GitHub Pages  
 
-   * Reads soil moisture & temperature
-   * Publishes data to the **MQTT broker**
-   * Listens for commands to control the **sprinkler**
+---
 
-2. **MQTT Broker**
+## 🔄 How It Works (IoT Flow)
 
-   * Middle layer between ESP32 and app (message exchange)
+1. **ESP32 Device (Edge IoT Node)**  
+   - Reads soil moisture & temperature from sensors  
+   - Publishes data to the **IoT broker (MQTT)**  
+   - Listens for commands to control the **sprinkler**  
 
-3. **Dashboard (Mobile App or PWA)**
+2. **IoT Broker (MQTT)**  
+   - Acts as the central hub for messaging  
+   - Relays data from ESP32 → Apps, and commands back to ESP32  
 
-   * Displays real-time sensor data
-   * Sends sprinkler commands (ON/OFF, runtime, hold)
+3. **User Dashboard (App / Web / PC)**  
+   - Subscribes to real-time data streams  
+   - Sends commands to control the sprinkler remotely  
+
+---
+
+## 📦 Installation
+
+### 📱 Mobile App (APK)
+👉 [Download SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)  
+
+### 💻 Windows Executable
+👉 [Download SoilSysDashboard.Setup.exe](https://github.com/mclards/soilsys-dashboard/releases/download/v5.1/SoilSysDashboard.Setup.exe)  
+
+### 🌐 Web Dashboard (PWA)
+1. Open in your browser:  
+   👉 [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)  
+2. Install prompt:  
+   - On **Android/iOS** → *Add to Home Screen*  
+   - On **Desktop (Chrome/Edge)** → *Install as App*  
 
 ---
 
@@ -69,25 +104,6 @@ Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to 
 
 ---
 
-## 📦 Installation
-
-### 📱 Mobile App (APK)
-
-* Download and install:
-  👉 [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)
-
-### 🌐 Web Dashboard (PWA)
-
-1. Open in your browser:
-   👉 [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)
-
-2. Install prompt:
-
-   * On **Android/iOS** → *Add to Home Screen*
-   * On **Desktop (Chrome/Edge)** → *Install as App*
-
----
-
 ## 👨‍💻 Creator  
 
 <p align="center">
@@ -98,14 +114,8 @@ Both versions connect to an **ESP32 microcontroller** via an **MQTT broker** to 
   <b>Engr. Clariden Montaño</b><br/>
   Licensed Electrical Engineer ⚡<br/>
   IoT & Arduino Developer 🤖<br/>
-  Web Programming Enthusiast 💻
+  Web Programming Enthusiast 💻<br/>
+  <a href="https://www.facebook.com/engr.clard">📘 Facebook Profile</a>
 </p>
-
----
-
-📌 **Interests:**  
-- IoT systems (ESP32, Arduino, MQTT)  
-- Electricity & Electronics  
-- Web technologies (HTML, CSS, JavaScript)  
 
 ---
