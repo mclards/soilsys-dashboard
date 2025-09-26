@@ -12,7 +12,7 @@ You can access the system in three ways:
 
 ## 📥 Releases
 
-- 📱 **Android App (APK):** [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)  
+- 📱 **Android App (APK):** [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SoilSysDashboard.apk)
 - 💻 **Windows Executable (.exe):** [SoilSysDashboard.Setup.exe](https://github.com/mclards/soilsys-dashboard/releases/download/v5.1/SoilSysDashboard.Setup.exe)  
 - 🌐 **Web Dashboard (PWA):** [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)  
 
