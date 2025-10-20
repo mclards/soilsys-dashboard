@@ -284,7 +284,8 @@
       <div><span class="status-label">Sprinkler Status:</span> <span id="pumpStatus" class="status-value">OFF</span>
       </div>
       <div><span class="status-label">Runtime:</span> <span id="runtime" class="status-value">0</span> sec</div>
-      <div><span class="status-label">Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
+      <div><span class="status-label">Up-Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
+      <div><span class="status-label">Lo-Threshold:</span> <span id="minthresholdVal" class="status-value">25</span>%</div>
       <div><span class="status-label">Client ID:</span> <span id="clientIdText" class="status-value"></span></div>
     </div>
 
@@ -296,8 +297,19 @@
     </div>
 
     <div class="input-group">
-      <input type="number" id="thresholdInput" placeholder="Threshold (%)">
+      <input type="number" id="thresholdInput" placeholder="Threshold (%max)">
       <button class="send" onclick="sendThreshold()">Send</button>
+    </div>
+
+    <!-- NEW: Minimum Threshold Input -->
+    <div class="input-group">
+      <input type="number" id="minThresholdInput" placeholder="Threshold (%min)">
+      <button class="send" onclick="sendMinThreshold()">Send</button>
+    </div>
+
+    <div class="input-group">
+      <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
+      <button class="send" onclick="sendRuntime()">Send</button>
     </div>
 
     <div class="buttons">
@@ -384,9 +396,12 @@
     const topicRuntime = "Runtime";
     const topicLastWill = "Lastwill";
 
-    const topicThreshold = "Threshold"; // NEW
+    const topicThreshold = "Threshold";
+    const topicMinThreshold = "MinThreshold"; // NEW
 
     const thresholdElem = document.getElementById('thresholdVal');
+    const minthresholdElem = document.getElementById('minthresholdVal');
+    const minThresholdInput = document.getElementById('minThresholdInput');
     const thresholdInput = document.getElementById('thresholdInput');
 
     const mqttStatusElem = document.getElementById('mqttStatus');
@@ -408,7 +423,8 @@
       client.subscribe(topicLastWill);
       // optional: subscribe to Sprinkler to sync button with device
       client.subscribe(topicSprinkler);
-      client.subscribe(topicThreshold); // NEW
+      client.subscribe(topicThreshold); 
+      client.subscribe(topicMinThreshold); // NEW
     });
 
     client.on('close', () => { mqttStatusElem.innerText = 'Disconnected'; mqttStatusElem.style.color = 'red'; });
@@ -423,6 +439,7 @@
         pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
         runtimeElem.innerText = data.runtime;
         thresholdElem.innerText = data.threshold; // NEW
+        minthresholdElem.innerText = data.minThreshold; // NEW
       } else if (topic === topicLastWill) {
         if (message.toString() === "System Online") {
           systemStatusElem.innerText = "Online";
@@ -487,6 +504,29 @@
       }
     }
 
+        // Send minimum threshold to ESP32
+    function sendMinThreshold() {
+      const val = parseInt(minThresholdInput.value);
+      if (!isNaN(val) && val >= 1 && val < 100) {
+        client.publish(topicMinThreshold, val.toString(), { retain: true });
+        minthresholdElem.innerText = val;
+        minThresholdInput.value = '';
+        systemStatusElem.innerText = `Minimum threshold set to ${val}%`;
+        systemStatusElem.style.color = "blue";
+
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
+      } else {
+        systemStatusElem.innerText = "Invalid minimum threshold input (1–99%)";
+        systemStatusElem.style.color = "red";
+        setTimeout(() => {
+          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
+          systemStatusElem.style.color = client.connected ? "green" : "red";
+        }, 2000);
+      }
+    }
 
     // ---------- Robust press/hold using Pointer Events ----------
     const sprinklerBtn = document.getElementById("sprinklerBtn");
