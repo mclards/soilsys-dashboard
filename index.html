@@ -44,9 +44,9 @@
     .modal-content {
       background-color: #fff;
       margin: 5% auto;
-      padding: 20px;
+      padding: 20px 15px 10px;
       border-radius: 12px;
-      width: 360px;
+      width: 480px;
       max-height: 80vh;
       /* limit height to viewport */
       overflow-y: auto;
@@ -221,6 +221,22 @@
     }
 
     @media (max-width:600px) {
+
+      .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px 15px 10px;
+        border-radius: 12px;
+        width: 360px;
+        max-height: 80vh;
+        /* limit height to viewport */
+        overflow-y: auto;
+        /* scroll inside modal only */
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
       .dashboard {
         padding: 20px 0% 10px;
       }
@@ -285,7 +301,8 @@
       </div>
       <div><span class="status-label">Runtime:</span> <span id="runtime" class="status-value">0</span> sec</div>
       <div><span class="status-label">Up-Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
-      <div><span class="status-label">Lo-Threshold:</span> <span id="minthresholdVal" class="status-value">25</span>%</div>
+      <div><span class="status-label">Lo-Threshold:</span> <span id="minthresholdVal" class="status-value">25</span>%
+      </div>
       <div><span class="status-label">Client ID:</span> <span id="clientIdText" class="status-value"></span></div>
     </div>
 
@@ -325,45 +342,57 @@
 
       <h3>🌱 System Overview</h3>
       <p>
-        The Soil Monitoring System measures <b>soil moisture</b> and <b>temperature</b>,
-        and controls a <b>sprinkler pump</b> either automatically or manually.
-        Data is displayed on this dashboard and synchronized through <b>IoT</b>.
+        The Soil Monitoring System measures <b>soil moisture</b> and <b>temperature</b>, and automatically controls
+        a <b>sprinkler pump</b> based on configurable moisture thresholds.
+        It operates through the <b>Internet of Things (IoT)</b>, synchronizing real-time data and controls between the
+        device and this web dashboard.
       </p>
 
       <h3>📊 Dashboard Features</h3>
       <ul>
-        <li><b>Moisture Gauge:</b> Current soil moisture (%)</li>
-        <li><b>Temperature Bar:</b> Current soil temperature (°C)</li>
-        <li><b>System Status:</b> Device Online / Offline</li>
-        <li><b>Server Status:</b> IoT connection Connected / Disconnected</li>
-        <li><b>Sprinkler Status:</b> Pump ON / OFF</li>
-        <li><b>Runtime:</b> Duration the pump runs (sec)</li>
-        <li><b>Threshold:</b> Moisture % where watering stops</li>
-        <li><b>Client ID:</b> Current web client identifier</li>
+        <li><b>Moisture Gauge:</b> Displays the current soil moisture (%)</li>
+        <li><b>Temperature Bar:</b> Displays the current soil temperature (°C)</li>
+        <li><b>System Status:</b> Shows device connection (Online / Offline)</li>
+        <li><b>Server Status:</b> Shows MQTT broker connection (Connected / Disconnected)</li>
+        <li><b>Sprinkler Status:</b> Displays whether the pump is ON or OFF</li>
+        <li><b>Runtime:</b> Sets how long the pump runs before auto-stop (in seconds)</li>
+        <li><b>Up-Threshold:</b> Moisture % where watering <b>stops automatically</b></li>
+        <li><b>Lo-Threshold:</b> Moisture % where watering <b>starts automatically</b></li>
+        <li><b>Client ID:</b> Unique identifier for the connected web client</li>
       </ul>
 
       <h3>🎛 Controls</h3>
       <ul>
-        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i></li>
-        <li><b>Threshold Input:</b> Enter % (1–100) → <i>Send</i></li>
+        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i> (defines pump active duration)</li>
+        <li><b>Up-Threshold Input:</b> Enter % (1–100) → <i>Send</i> (Should always greater than Lo-Threshold)</li>
+        <li><b>Lo-Threshold Input:</b> Enter % (1–99) → <i>Send</i> (Should always lesser than Up-Threshold)</li>
         <li><b>Sprinkler Button:</b><br>
-          • Short press → toggle ON/OFF (auto mode)<br>
-          • Hold → manual override (stays ON until released)
+          • Short press → Toggle ON/OFF in automatic mode<br>
+          • Hold (~1 s) → Manual override mode (pump stays ON until released)
         </li>
+      </ul>
+
+      <h3>🤖 Automatic Watering Logic</h3>
+      <ul>
+        <li>If <b>moisture ≤ Lo-Threshold</b> → Pump turns <b>ON automatically</b></li>
+        <li>If <b>moisture ≥ Up-Threshold</b> → Pump turns <b>OFF automatically</b></li>
+        <li>If <b>runtime limit</b> is reached → Pump also turns <b>OFF automatically</b></li>
       </ul>
 
       <h3>🔘 Device Button (on ESP32)</h3>
       <ul>
         <li><b>1 click:</b> Toggle pump (auto mode)</li>
-        <li><b>Long press:</b> Enable / disable manual override</li>
-        <li><b>5 quick clicks:</b> Reset WiFi credentials → starts AP mode on reboot</li>
+        <li><b>Long press:</b> Enable or disable manual override</li>
+        <li><b>5 quick clicks:</b> Reset Wi-Fi credentials → device restarts in AP setup mode</li>
       </ul>
 
       <hr>
       <p style="text-align:center; margin-top:10px; font-size:13px; color:#555;">
-        © 2025 Created by Engr. Clariden Montaño
+        © 2025 Created by Engr. Clariden Montaño<br>
+        SoilSys IoT Dashboard v5.1
       </p>
     </div>
+
   </div>
 
   <script>
@@ -423,7 +452,7 @@
       client.subscribe(topicLastWill);
       // optional: subscribe to Sprinkler to sync button with device
       client.subscribe(topicSprinkler);
-      client.subscribe(topicThreshold); 
+      client.subscribe(topicThreshold);
       client.subscribe(topicMinThreshold); // NEW
     });
 
@@ -504,7 +533,7 @@
       }
     }
 
-        // Send minimum threshold to ESP32
+    // Send minimum threshold to ESP32
     function sendMinThreshold() {
       const val = parseInt(minThresholdInput.value);
       if (!isNaN(val) && val >= 1 && val < 100) {
