@@ -78,7 +78,7 @@ You can access the system in three ways:
 ## 📦 Installation
 
 ### 📱 Mobile App (APK)
-👉 [Download SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v1.0.0/SoilSysApp.apk)  
+👉 [Download SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SoilSysDashboard.apk)  
 
 ### 💻 Windows Executable
 👉 [Download SoilSysDashboard.Setup.exe](https://github.com/mclards/soilsys-dashboard/releases/download/v5.1/SoilSysDashboard.Setup.exe)  
