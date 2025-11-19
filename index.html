@@ -28,7 +28,6 @@
       background: #31baf0;
     }
 
-    /* Modal styling */
     .modal {
       display: none;
       position: fixed;
@@ -48,9 +47,7 @@
       border-radius: 12px;
       width: 480px;
       max-height: 80vh;
-      /* limit height to viewport */
       overflow-y: auto;
-      /* scroll inside modal only */
       text-align: left;
       font-size: 14px;
       line-height: 1.5;
@@ -229,9 +226,7 @@
         border-radius: 12px;
         width: 360px;
         max-height: 80vh;
-        /* limit height to viewport */
         overflow-y: auto;
-        /* scroll inside modal only */
         text-align: left;
         font-size: 14px;
         line-height: 1.5;
@@ -318,7 +313,6 @@
       <button class="send" onclick="sendThreshold()">Send</button>
     </div>
 
-    <!-- NEW: Minimum Threshold Input -->
     <div class="input-group">
       <input type="number" id="minThresholdInput" placeholder="Threshold (%min)">
       <button class="send" onclick="sendMinThreshold()">Send</button>
@@ -363,27 +357,27 @@
 
       <h3>🎛 Controls</h3>
       <ul>
-        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i> (defines pump active duration)</li>
-        <li><b>Up-Threshold Input:</b> Enter % (1–100) → <i>Send</i> (Should always greater than Lo-Threshold)</li>
-        <li><b>Lo-Threshold Input:</b> Enter % (1–99) → <i>Send</i> (Should always lesser than Up-Threshold)</li>
+        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i></li>
+        <li><b>Up-Threshold Input:</b> Enter % (1–100) → <i>Send</i></li>
+        <li><b>Lo-Threshold Input:</b> Enter % (1–99) → <i>Send</i></li>
         <li><b>Sprinkler Button:</b><br>
-          • Short press → Toggle ON/OFF in automatic mode<br>
-          • Hold (~1 s) → Manual override mode (pump stays ON until released)
+          Short press → Toggle ON/OFF<br>
+          Hold (~1 s) → Manual override mode
         </li>
       </ul>
 
       <h3>🤖 Automatic Watering Logic</h3>
       <ul>
-        <li>If <b>moisture ≤ Lo-Threshold</b> → Pump turns <b>ON automatically</b></li>
-        <li>If <b>moisture ≥ Up-Threshold</b> → Pump turns <b>OFF automatically</b></li>
-        <li>If <b>runtime limit</b> is reached → Pump also turns <b>OFF automatically</b></li>
+        <li>If <b>moisture ≤ Lo-Threshold</b> → Pump ON</li>
+        <li>If <b>moisture ≥ Up-Threshold</b> → Pump OFF</li>
+        <li>If <b>runtime limit</b> is reached → Pump OFF</li>
       </ul>
 
       <h3>🔘 Device Button (on ESP32)</h3>
       <ul>
-        <li><b>1 click:</b> Toggle pump (auto mode)</li>
-        <li><b>Long press:</b> Enable or disable manual override</li>
-        <li><b>5 quick clicks:</b> Reset Wi-Fi credentials → device restarts in AP setup mode</li>
+        <li><b>1 click:</b> Toggle pump</li>
+        <li><b>Long press:</b> Manual override</li>
+        <li><b>5 clicks:</b> Reset Wi-Fi</li>
       </ul>
 
       <hr>
@@ -426,7 +420,7 @@
     const topicLastWill = "Lastwill";
 
     const topicThreshold = "Threshold";
-    const topicMinThreshold = "MinThreshold"; // NEW
+    const topicMinThreshold = "MinThreshold";
 
     const thresholdElem = document.getElementById('thresholdVal');
     const minthresholdElem = document.getElementById('minthresholdVal');
@@ -442,7 +436,6 @@
     let currentMoisture = 0, targetMoisture = 0;
     let currentTemp = 0, targetTemp = 0;
 
-    // sprinkler UI state
     let sprinklerState = 0;
 
     client.on('connect', () => {
@@ -450,10 +443,9 @@
       mqttStatusElem.style.color = 'green';
       client.subscribe(topicJSON);
       client.subscribe(topicLastWill);
-      // optional: subscribe to Sprinkler to sync button with device
       client.subscribe(topicSprinkler);
       client.subscribe(topicThreshold);
-      client.subscribe(topicMinThreshold); // NEW
+      client.subscribe(topicMinThreshold);
     });
 
     client.on('close', () => { mqttStatusElem.innerText = 'Disconnected'; mqttStatusElem.style.color = 'red'; });
@@ -467,8 +459,8 @@
         targetTemp = data.temperature;
         pumpStatusElem.innerText = data.pumpRunning ? "ON" : "OFF";
         runtimeElem.innerText = data.runtime;
-        thresholdElem.innerText = data.threshold; // NEW
-        minthresholdElem.innerText = data.minThreshold; // NEW
+        thresholdElem.innerText = data.threshold;
+        minthresholdElem.innerText = data.minThreshold;
       } else if (topic === topicLastWill) {
         if (message.toString() === "System Online") {
           systemStatusElem.innerText = "Online";
@@ -478,7 +470,6 @@
           systemStatusElem.style.color = "red";
         }
       } else if (topic === topicSprinkler) {
-        // keep button color in sync if other clients toggle it
         const v = parseInt(message.toString(), 10) || 0;
         sprinklerState = v ? 1 : 0;
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
@@ -494,7 +485,6 @@
         systemStatusElem.innerText = `Runtime set to ${val}s`;
         systemStatusElem.style.color = "blue";
 
-        // revert to lastwill after 2s
         setTimeout(() => {
           systemStatusElem.innerText = client.connected ? "Online" : "Offline";
           systemStatusElem.style.color = client.connected ? "green" : "red";
@@ -518,7 +508,6 @@
         systemStatusElem.innerText = `Threshold set to ${val}%`;
         systemStatusElem.style.color = "blue";
 
-        // revert to lastwill after 2s
         setTimeout(() => {
           systemStatusElem.innerText = client.connected ? "Online" : "Offline";
           systemStatusElem.style.color = client.connected ? "green" : "red";
@@ -533,7 +522,6 @@
       }
     }
 
-    // Send minimum threshold to ESP32
     function sendMinThreshold() {
       const val = parseInt(minThresholdInput.value);
       if (!isNaN(val) && val >= 1 && val < 100) {
@@ -557,7 +545,6 @@
       }
     }
 
-    // ---------- Robust press/hold using Pointer Events ----------
     const sprinklerBtn = document.getElementById("sprinklerBtn");
     const LONG_MS = 600;
 
@@ -572,7 +559,7 @@
 
       clearTimeout(pressTimer);
       pressTimer = setTimeout(() => {
-        if (!isPointerDown) return;        // guard: was released/cancelled
+        if (!isPointerDown) return;
         longPressActive = true;
         client.publish(topicSprinklerLong, "1", { retain: true });
         sprinklerBtn.innerText = "HOLDING…";
@@ -581,18 +568,16 @@
     }
 
     function endPress(e) {
-      if (!isPointerDown) return;          // ignore hover/stray events
+      if (!isPointerDown) return;
       e.preventDefault();
       clearTimeout(pressTimer);
 
       if (longPressActive) {
-        // release the long hold
         client.publish(topicSprinklerLong, "0", { retain: true });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       } else {
-        // short click: toggle sprinkler
         sprinklerState = 1;
         client.publish(topicSprinkler, sprinklerState.toString(), { retain: true });
         pumpStatusElem.innerText = sprinklerState ? "ON" : "OFF";
@@ -606,7 +591,6 @@
       clearTimeout(pressTimer);
       isPointerDown = false;
 
-      // if we had already started a hold, ensure it's released
       if (longPressActive) {
         client.publish(topicSprinklerLong, "0", { retain: true });
         longPressActive = false;
@@ -615,14 +599,12 @@
       }
     }
 
-    // Use only pointer events (prevents double mouse+touch firing)
     sprinklerBtn.addEventListener("pointerdown", startPress);
     sprinklerBtn.addEventListener("pointerup", endPress);
     sprinklerBtn.addEventListener("pointerleave", () => { if (isPointerDown) endPress(new Event('pointerup')); });
     sprinklerBtn.addEventListener("pointercancel", cancelPress);
-    sprinklerBtn.oncontextmenu = (e) => e.preventDefault(); // stop long-press menu on mobile
+    sprinklerBtn.oncontextmenu = (e) => e.preventDefault();
 
-    // ---------- Gauges ----------
     const canvas = document.getElementById('moistureCanvas');
     const ctx = canvas.getContext('2d');
     const radius = canvas.width / 2 - 20;
