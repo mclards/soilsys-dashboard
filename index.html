@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,269 +10,50 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
-    #aboutBtn {
-      display: block;
-      margin: 50px auto 0 auto;
-      font-size: 14px;
-      padding: 6px 20px 6px;
-      border: none;
-      border-radius: 10px;
-      background: #046168;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    #aboutBtn:hover {
-      background: #31baf0;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 5% auto;
-      padding: 20px 15px 10px;
-      border-radius: 12px;
-      width: 480px;
-      max-height: 80vh;
-      overflow-y: auto;
-      text-align: left;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close:hover {
-      color: #000;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #1E93AB;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .dashboard {
-      background: #DCDCDC;
-      padding: 15px 50px 10px;
-      border-radius: 20px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-      text-align: center;
-      width: 480px;
-      max-width: 95%;
-    }
-
-    h1 {
-      color: #000000;
-      font-size: 32px;
-      text-transform: uppercase;
-      margin-bottom: 0px;
-    }
-
-    h2 {
-      color: #000000;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 40px;
-      font-size: 28px;
-    }
-
-    .bar-title {
-      margin-top: 10px;
-      font-size: 20px;
-      font-weight: bold;
-      color: #34495e;
-    }
-
-    .gauge-row {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: flex-end;
-      gap: 5px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .gauge-row>div {
-      text-align: center;
-    }
-
-    .moisture-canvas,
-    .temp-canvas {
-      display: block;
-    }
-
-    .moisture-canvas {
-      width: 250px;
-      height: 250px;
-    }
-
-    .temp-canvas {
-      width: 100px;
-      height: 250px;
-    }
-
-    .status-label {
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .status-value {
-      font-size: 12px;
-    }
-
-    .status div {
-      margin-bottom: 1px;
-      line-height: 1.2;
-    }
-
-    .input-group {
-      margin-bottom: 10px;
-      line-height: 1.2 em;
-    }
-
-    input {
-      padding: 8px;
-      width: 140px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      text-align: center;
-    }
-
-    button.send {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 25px;
-      background: #2980b9;
-      color: #fff;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    button.send:hover {
-      background: #3498db;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-around;
-      gap: 20px;
-      margin-top: 40px;
-    }
-
-    button#sprinklerBtn {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 18px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      color: #fff;
-      flex: 1;
-      background-color: #27ae60;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: none;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    button#sprinklerBtn:hover {
-      opacity: 0.9;
-    }
-
-    footer {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .gauge-row>div:last-child .bar-title {
-      margin-left: -8px;
-    }
-
+    #aboutBtn { display:block;margin:50px auto 0 auto;font-size:14px;padding:6px 20px 6px;border:none;border-radius:10px;background:#046168;color:white;cursor:pointer;transition:0.2s; }
+    #aboutBtn:hover { background:#31baf0; }
+    .modal { display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.6); }
+    .modal-content { background-color:#fff;margin:5% auto;padding:20px 15px 10px;border-radius:12px;width:480px;max-height:80vh;overflow-y:auto;text-align:left;font-size:14px;line-height:1.5; }
+    .close { color:#aaa;float:right;font-size:20px;font-weight:bold;cursor:pointer; }
+    .close:hover { color:#000; }
+    body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#1E93AB;display:flex;justify-content:center;align-items:center;height:100vh;margin:0; }
+    .dashboard { background:#DCDCDC;padding:15px 50px 10px;border-radius:20px;box-shadow:0 15px 30px rgba(0,0,0,0.25);text-align:center;width:480px;max-width:95%; }
+    h1 { color:#000;font-size:32px;text-transform:uppercase;margin-bottom:0; }
+    h2 { color:#000;text-align:center;margin-top:0;margin-bottom:40px;font-size:28px; }
+    .bar-title { margin-top:10px;font-size:20px;font-weight:bold;color:#34495e; }
+    .gauge-row { display:flex;justify-content:space-evenly;align-items:flex-end;gap:5px;margin-bottom:20px;flex-wrap:wrap; }
+    .gauge-row>div { text-align:center; }
+    .moisture-canvas, .temp-canvas { display:block; }
+    .moisture-canvas { width:250px;height:250px; }
+    .temp-canvas { width:100px;height:250px; }
+    .status-label { font-weight:bold;font-size:12px; }
+    .status-value { font-size:12px; }
+    .status div { margin-bottom:1px;line-height:1.2; }
+    .input-group { margin-bottom:10px;line-height:1.2em; }
+    input { padding:8px;width:140px;border-radius:8px;border:1px solid #ccc;font-size:16px;text-align:center; }
+    button.send { padding:8px 16px;border:none;border-radius:25px;background:#2980b9;color:#fff;font-weight:bold;font-size:15px;cursor:pointer;transition:0.3s;box-shadow:0 10px 20px rgba(0,0,0,0.15); }
+    button.send:hover { background:#3498db; }
+    .buttons { display:flex;justify-content:space-around;gap:20px;margin-top:40px; }
+    button#sprinklerBtn { padding:15px 30px;border:none;border-radius:18px;font-size:18px;font-weight:bold;cursor:pointer;color:#fff;flex:1;background-color:#27ae60;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:0 10px 20px rgba(0,0,0,0.15); }
+    button#sprinklerBtn:hover { opacity:0.9; }
+    footer { margin-top:20px;font-size:14px;color:#555; }
+    .gauge-row>div:last-child .bar-title { margin-left:-8px; }
     @media (max-width:600px) {
-
-      .modal-content {
-        background-color: #fff;
-        margin: 5% auto;
-        padding: 20px 15px 10px;
-        border-radius: 12px;
-        width: 360px;
-        max-height: 80vh;
-        overflow-y: auto;
-        text-align: left;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-
-      .dashboard {
-        padding: 20px 0% 10px;
-      }
-
-      .buttons {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      button#sprinklerBtn {
-        margin: 0 auto;
-        width: 80%;
-        display: block;
-      }
-
-      .gauge-row {
-        flex-direction: row;
-        gap: 5px;
-        justify-content: center;
-        align-items: flex-end;
-      }
-
-      .moisture-canvas {
-        width: 180px;
-        height: 180px;
-      }
-
-      .temp-canvas {
-        width: 70px;
-        height: 180px;
-      }
-
-      .gauge-row .bar-title {
-        font-size: 16px;
-      }
+      .modal-content { margin:5% auto;padding:20px 15px 10px;border-radius:12px;width:360px;max-height:80vh;overflow-y:auto;text-align:left;font-size:14px;line-height:1.5; }
+      .dashboard { padding:20px 0% 10px; }
+      .buttons { flex-direction:column;gap:15px; }
+      button#sprinklerBtn { margin:0 auto;width:80%;display:block; }
+      .gauge-row { flex-direction:row;gap:5px;justify-content:center;align-items:flex-end; }
+      .moisture-canvas { width:180px;height:180px; }
+      .temp-canvas { width:70px;height:180px; }
+      .gauge-row .bar-title { font-size:16px; }
     }
   </style>
 </head>
 
 <body>
   <div class="dashboard">
-    <h1 style="text-align:center; margin-bottom: 0;">SOIL MONITORING</h1>
+    <h1 style="text-align:center; margin-bottom:0;">SOIL MONITORING</h1>
     <h2>Dashboard</h2>
 
     <div class="gauge-row">
@@ -288,39 +68,29 @@
     </div>
 
     <div class="status">
-      <div><span class="status-label">System Status:</span> <span id="systemStatus" class="status-value"
-          style="color:blue;">Unknown</span></div>
-      <div><span class="status-label">Server Status:</span> <span id="mqttStatus" class="status-value"
-          style="color:red;">Disconnected</span></div>
-      <div><span class="status-label">Sprinkler Status:</span> <span id="pumpStatus" class="status-value">OFF</span>
-      </div>
+      <div><span class="status-label">System Status:</span> <span id="systemStatus" class="status-value" style="color:blue;">Unknown</span></div>
+      <div><span class="status-label">Server Status:</span> <span id="mqttStatus" class="status-value" style="color:red;">Disconnected</span></div>
+      <div><span class="status-label">Sprinkler Status:</span> <span id="pumpStatus" class="status-value">OFF</span></div>
       <div><span class="status-label">Runtime:</span> <span id="runtime" class="status-value">0</span> sec</div>
       <div><span class="status-label">Up-Threshold:</span> <span id="thresholdVal" class="status-value">85</span>%</div>
-      <div><span class="status-label">Lo-Threshold:</span> <span id="minthresholdVal" class="status-value">25</span>%
-      </div>
+      <div><span class="status-label">Lo-Threshold:</span> <span id="minthresholdVal" class="status-value">25</span>%</div>
       <div><span class="status-label">Client ID:</span> <span id="clientIdText" class="status-value"></span></div>
     </div>
 
-    <br />
-
+    <br>
     <div class="input-group">
-      <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
+      <input type="number" id="runtimeInput">
       <button class="send" onclick="sendRuntime()">Send</button>
     </div>
 
     <div class="input-group">
-      <input type="number" id="thresholdInput" placeholder="Threshold (%max)">
+      <input type="number" id="thresholdInput">
       <button class="send" onclick="sendThreshold()">Send</button>
     </div>
 
     <div class="input-group">
-      <input type="number" id="minThresholdInput" placeholder="Threshold (%min)">
+      <input type="number" id="minThresholdInput">
       <button class="send" onclick="sendMinThreshold()">Send</button>
-    </div>
-
-    <div class="input-group">
-      <input type="number" id="runtimeInput" placeholder="Runtime (sec)">
-      <button class="send" onclick="sendRuntime()">Send</button>
     </div>
 
     <div class="buttons">
@@ -328,65 +98,56 @@
     </div>
     <button id="aboutBtn">About</button>
   </div>
+
   <div id="aboutModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <h2 style="text-align:center; margin-bottom:10px;">User Guide</h2>
       <hr>
 
-      <h3>🌱 System Overview</h3>
-      <p>
-        The Soil Monitoring System measures <b>soil moisture</b> and <b>temperature</b>, and automatically controls
-        a <b>sprinkler pump</b> based on configurable moisture thresholds.
-        It operates through the <b>Internet of Things (IoT)</b>, synchronizing real-time data and controls between the
-        device and this web dashboard.
-      </p>
+      <h3>System Overview</h3>
+      <p>The Soil Monitoring System measures soil moisture and temperature and controls a sprinkler pump based on thresholds.</p>
 
-      <h3>📊 Dashboard Features</h3>
+      <h3>Dashboard Features</h3>
       <ul>
-        <li><b>Moisture Gauge:</b> Displays the current soil moisture (%)</li>
-        <li><b>Temperature Bar:</b> Displays the current soil temperature (°C)</li>
-        <li><b>System Status:</b> Shows device connection (Online / Offline)</li>
-        <li><b>Server Status:</b> Shows MQTT broker connection (Connected / Disconnected)</li>
-        <li><b>Sprinkler Status:</b> Displays whether the pump is ON or OFF</li>
-        <li><b>Runtime:</b> Sets how long the pump runs before auto-stop (in seconds)</li>
-        <li><b>Up-Threshold:</b> Moisture % where watering <b>stops automatically</b></li>
-        <li><b>Lo-Threshold:</b> Moisture % where watering <b>starts automatically</b></li>
-        <li><b>Client ID:</b> Unique identifier for the connected web client</li>
+        <li>Moisture Gauge</li>
+        <li>Temperature Bar</li>
+        <li>System Status</li>
+        <li>Server Status</li>
+        <li>Sprinkler Status</li>
+        <li>Runtime</li>
+        <li>Up-Threshold</li>
+        <li>Lo-Threshold</li>
+        <li>Client ID</li>
       </ul>
 
-      <h3>🎛 Controls</h3>
+      <h3>Controls</h3>
       <ul>
-        <li><b>Runtime Input:</b> Enter seconds → <i>Send</i></li>
-        <li><b>Up-Threshold Input:</b> Enter % (1–100) → <i>Send</i></li>
-        <li><b>Lo-Threshold Input:</b> Enter % (1–99) → <i>Send</i></li>
-        <li><b>Sprinkler Button:</b><br>
-          Short press → Toggle ON/OFF<br>
-          Hold (~1 s) → Manual override mode
-        </li>
+        <li>Runtime Input</li>
+        <li>Up-Threshold Input</li>
+        <li>Lo-Threshold Input</li>
+        <li>Sprinkler Button</li>
       </ul>
 
-      <h3>🤖 Automatic Watering Logic</h3>
+      <h3>Automatic Watering Logic</h3>
       <ul>
-        <li>If <b>moisture ≤ Lo-Threshold</b> → Pump ON</li>
-        <li>If <b>moisture ≥ Up-Threshold</b> → Pump OFF</li>
-        <li>If <b>runtime limit</b> is reached → Pump OFF</li>
+        <li>Moisture ≤ Lo-Threshold → Pump ON</li>
+        <li>Moisture ≥ Up-Threshold → Pump OFF</li>
+        <li>Runtime limit reached → Pump OFF</li>
       </ul>
 
-      <h3>🔘 Device Button (on ESP32)</h3>
+      <h3>Device Button</h3>
       <ul>
-        <li><b>1 click:</b> Toggle pump</li>
-        <li><b>Long press:</b> Manual override</li>
-        <li><b>5 clicks:</b> Reset Wi-Fi</li>
+        <li>1 click: Toggle pump</li>
+        <li>Long press: Manual override</li>
+        <li>5 clicks: Reset Wi-Fi</li>
       </ul>
 
       <hr>
       <p style="text-align:center; margin-top:10px; font-size:13px; color:#555;">
-        © 2025 Created by Engr. Clariden Montaño<br>
-        SoilSys IoT Dashboard v5.1
+        © 2025 Clariden Montaño<br>SoilSys IoT Dashboard v5.1
       </p>
     </div>
-
   </div>
 
   <script>
@@ -396,9 +157,7 @@
 
     btn.onclick = () => modal.style.display = "block";
     span.onclick = () => modal.style.display = "none";
-    window.onclick = (event) => {
-      if (event.target === modal) modal.style.display = "none";
-    };
+    window.onclick = (event) => { if (event.target === modal) modal.style.display = "none"; };
   </script>
 
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -418,7 +177,6 @@
     const topicSprinklerLong = "SprinklerLong";
     const topicRuntime = "Runtime";
     const topicLastWill = "Lastwill";
-
     const topicThreshold = "Threshold";
     const topicMinThreshold = "MinThreshold";
 
@@ -426,7 +184,6 @@
     const minthresholdElem = document.getElementById('minthresholdVal');
     const minThresholdInput = document.getElementById('minThresholdInput');
     const thresholdInput = document.getElementById('thresholdInput');
-
     const mqttStatusElem = document.getElementById('mqttStatus');
     const systemStatusElem = document.getElementById('systemStatus');
     const pumpStatusElem = document.getElementById('pumpStatus');
@@ -435,7 +192,6 @@
 
     let currentMoisture = 0, targetMoisture = 0;
     let currentTemp = 0, targetTemp = 0;
-
     let sprinklerState = 0;
 
     client.on('connect', () => {
@@ -448,9 +204,9 @@
       client.subscribe(topicMinThreshold);
     });
 
-    client.on('close', () => { mqttStatusElem.innerText = 'Disconnected'; mqttStatusElem.style.color = 'red'; });
-    client.on('offline', () => { mqttStatusElem.innerText = 'Offline'; mqttStatusElem.style.color = 'orange'; });
-    client.on('error', () => { mqttStatusElem.innerText = 'Error'; mqttStatusElem.style.color = 'red'; });
+    client.on('close', () => { mqttStatusElem.innerText='Disconnected'; mqttStatusElem.style.color='red'; });
+    client.on('offline', () => { mqttStatusElem.innerText='Offline'; mqttStatusElem.style.color='orange'; });
+    client.on('error', () => { mqttStatusElem.innerText='Error'; mqttStatusElem.style.color='red'; });
 
     client.on('message', (topic, message) => {
       if (topic === topicJSON) {
@@ -463,11 +219,9 @@
         minthresholdElem.innerText = data.minThreshold;
       } else if (topic === topicLastWill) {
         if (message.toString() === "System Online") {
-          systemStatusElem.innerText = "Online";
-          systemStatusElem.style.color = "green";
+          systemStatusElem.innerText = "Online"; systemStatusElem.style.color="green";
         } else {
-          systemStatusElem.innerText = "Offline";
-          systemStatusElem.style.color = "red";
+          systemStatusElem.innerText = "Offline"; systemStatusElem.style.color="red";
         }
       } else if (topic === topicSprinkler) {
         const v = parseInt(message.toString(), 10) || 0;
@@ -479,75 +233,58 @@
     function sendRuntime() {
       const val = parseInt(runtimeInput.value);
       if (!isNaN(val) && val > 0) {
-        client.publish(topicRuntime, val.toString(), { retain: true });
+        client.publish(topicRuntime, val.toString(), { retain:true });
         runtimeElem.innerText = val;
         runtimeInput.value = '';
         systemStatusElem.innerText = `Runtime set to ${val}s`;
         systemStatusElem.style.color = "blue";
-
         setTimeout(() => {
           systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
+          systemStatusElem.style.color = client.connected ? "green":"red";
         }, 2000);
       } else {
         systemStatusElem.innerText = "Invalid runtime input";
-        systemStatusElem.style.color = "red";
+        systemStatusElem.style.color="red";
         setTimeout(() => {
-          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
+          systemStatusElem.innerText = client.connected ? "Online":"Offline";
+          systemStatusElem.style.color = client.connected ? "green":"red";
         }, 2000);
       }
     }
 
     function sendThreshold() {
-      const val = parseInt(thresholdInput.value);
-      if (!isNaN(val) && val > 0 && val <= 100) {
-        client.publish(topicThreshold, val.toString(), { retain: true });
-        thresholdElem.innerText = val;
-        thresholdInput.value = '';
-        systemStatusElem.innerText = `Threshold set to ${val}%`;
-        systemStatusElem.style.color = "blue";
-
-        setTimeout(() => {
-          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
-        }, 2000);
-      } else {
-        systemStatusElem.innerText = "Invalid threshold input (1–100%)";
-        systemStatusElem.style.color = "red";
-        setTimeout(() => {
-          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
-        }, 2000);
-      }
+      const upVal = parseInt(thresholdInput.value);
+      const loVal = parseInt(minthresholdElem.innerText);
+      if (isNaN(upVal) || upVal <= 0 || upVal > 100) { showTempStatus("Invalid Up-Threshold input","red"); return; }
+      if (upVal <= loVal) { showTempStatus(`Up-Threshold must be greater than Lo-Threshold`,"red"); return; }
+      client.publish(topicThreshold, upVal.toString(), { retain:true });
+      thresholdElem.innerText = upVal;
+      thresholdInput.value = '';
+      showTempStatus(`Up-Threshold set to ${upVal}%`,"blue");
     }
 
     function sendMinThreshold() {
-      const val = parseInt(minThresholdInput.value);
-      if (!isNaN(val) && val >= 1 && val < 100) {
-        client.publish(topicMinThreshold, val.toString(), { retain: true });
-        minthresholdElem.innerText = val;
-        minThresholdInput.value = '';
-        systemStatusElem.innerText = `Minimum threshold set to ${val}%`;
-        systemStatusElem.style.color = "blue";
+      const loVal = parseInt(minThresholdInput.value);
+      const upVal = parseInt(thresholdElem.innerText);
+      if (isNaN(loVal) || loVal < 1 || loVal >= 100) { showTempStatus("Invalid Lo-Threshold input","red"); return; }
+      if (loVal >= upVal) { showTempStatus(`Lo-Threshold must be less than Up-Threshold`,"red"); return; }
+      client.publish(topicMinThreshold, loVal.toString(), { retain:true });
+      minthresholdElem.innerText = loVal;
+      minThresholdInput.value = '';
+      showTempStatus(`Lo-Threshold set to ${loVal}%`,"blue");
+    }
 
-        setTimeout(() => {
-          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
-        }, 2000);
-      } else {
-        systemStatusElem.innerText = "Invalid minimum threshold input (1–99%)";
-        systemStatusElem.style.color = "red";
-        setTimeout(() => {
-          systemStatusElem.innerText = client.connected ? "Online" : "Offline";
-          systemStatusElem.style.color = client.connected ? "green" : "red";
-        }, 2000);
-      }
+    function showTempStatus(text,color) {
+      systemStatusElem.innerText = text;
+      systemStatusElem.style.color = color;
+      setTimeout(() => {
+        systemStatusElem.innerText = client.connected ? "Online":"Offline";
+        systemStatusElem.style.color = client.connected ? "green":"red";
+      }, 2500);
     }
 
     const sprinklerBtn = document.getElementById("sprinklerBtn");
     const LONG_MS = 600;
-
     let pressTimer = null;
     let isPointerDown = false;
     let longPressActive = false;
@@ -556,12 +293,11 @@
       e.preventDefault();
       isPointerDown = true;
       longPressActive = false;
-
       clearTimeout(pressTimer);
       pressTimer = setTimeout(() => {
         if (!isPointerDown) return;
         longPressActive = true;
-        client.publish(topicSprinklerLong, "1", { retain: true });
+        client.publish(topicSprinklerLong, "1", { retain:true });
         sprinklerBtn.innerText = "HOLDING…";
         sprinklerBtn.style.backgroundColor = "#e67e22";
       }, LONG_MS);
@@ -571,28 +307,25 @@
       if (!isPointerDown) return;
       e.preventDefault();
       clearTimeout(pressTimer);
-
       if (longPressActive) {
-        client.publish(topicSprinklerLong, "0", { retain: true });
+        client.publish(topicSprinklerLong, "0", { retain:true });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       } else {
         sprinklerState = 1;
-        client.publish(topicSprinkler, sprinklerState.toString(), { retain: true });
-        pumpStatusElem.innerText = sprinklerState ? "ON" : "OFF";
+        client.publish(topicSprinkler, sprinklerState.toString(), { retain:true });
+        pumpStatusElem.innerText = sprinklerState ? "ON":"OFF";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
       }
-
       isPointerDown = false;
     }
 
     function cancelPress() {
       clearTimeout(pressTimer);
       isPointerDown = false;
-
       if (longPressActive) {
-        client.publish(topicSprinklerLong, "0", { retain: true });
+        client.publish(topicSprinklerLong, "0", { retain:true });
         longPressActive = false;
         sprinklerBtn.innerText = "SPRINKLER";
         sprinklerBtn.style.backgroundColor = sprinklerState ? "#27ae60" : "#c0392b";
@@ -612,53 +345,44 @@
     const tempCanvas = document.getElementById('tempCanvas');
     const tctx = tempCanvas.getContext('2d');
 
-    function interpolateColor(color1, color2, factor) {
-      const result = color1.slice();
-      for (let i = 0; i < 3; i++) result[i] = Math.round(result[i] + factor * (color2[i] - color1[i]));
-      return result;
-    }
-    function hexToRgb(hex) {
-      const bigint = parseInt(hex.slice(1), 16);
-      return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
-    }
+    function interpolateColor(color1,color2,factor){const r=color1.slice();for(let i=0;i<3;i++)r[i]=Math.round(r[i]+factor*(color2[i]-color1[i]));return r;}
+    function hexToRgb(hex){const b=parseInt(hex.slice(1),16);return[(b>>16)&255,(b>>8)&255,b&255];}
+
     const dryColor = hexToRgb("#a0522d");
     const midColor = hexToRgb("#9acd32");
     const wetColor = hexToRgb("#1e90ff");
-    function getMoistureColor(value) {
-      if (value < 50) return interpolateColor(dryColor, midColor, value / 50);
-      return interpolateColor(midColor, wetColor, (value - 50) / 50);
-    }
+
+    function getMoistureColor(v){ if(v<50)return interpolateColor(dryColor,midColor,v/50); return interpolateColor(midColor,wetColor,(v-50)/50); }
 
     function drawMoisture() {
       const diff = targetMoisture - currentMoisture;
       currentMoisture += diff * 0.05;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const angle = (currentMoisture / 100) * 2 * Math.PI;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const cx = canvas.width/2, cy = canvas.height/2;
+      const angle = (currentMoisture/100)*2*Math.PI;
 
       const rgb = getMoistureColor(currentMoisture);
       const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
 
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.strokeStyle = '#eee';
-      ctx.lineWidth = 30;
+      ctx.arc(cx,cy,radius,0,2*Math.PI);
+      ctx.strokeStyle='#eee';
+      ctx.lineWidth=30;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 30;
-      ctx.lineCap = 'round';
+      ctx.arc(cx,cy,radius,-Math.PI/2,-Math.PI/2+angle);
+      ctx.strokeStyle=color;
+      ctx.lineWidth=30;
+      ctx.lineCap='round';
       ctx.stroke();
 
-      ctx.fillStyle = '#111';
-      ctx.font = 'bold 36px Segoe UI';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(Math.round(currentMoisture) + '%', centerX, centerY);
+      ctx.fillStyle='#111';
+      ctx.font='bold 36px Segoe UI';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(Math.round(currentMoisture)+'%',cx,cy);
 
       requestAnimationFrame(drawMoisture);
     }
@@ -667,24 +391,23 @@
       const diff = targetTemp - currentTemp;
       currentTemp += diff * 0.05;
 
-      tctx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+      tctx.clearRect(0,0,tempCanvas.width,tempCanvas.height);
+      const gradient=tctx.createLinearGradient(0,tempCanvas.height-20,0,0);
+      gradient.addColorStop(0,"blue");
+      gradient.addColorStop(1,"red");
 
-      const gradient = tctx.createLinearGradient(0, tempCanvas.height - 20, 0, 0);
-      gradient.addColorStop(0, "blue");
-      gradient.addColorStop(1, "red");
+      tctx.fillStyle="#eee";
+      tctx.fillRect(30,0,40,tempCanvas.height-20);
 
-      tctx.fillStyle = "#eee";
-      tctx.fillRect(30, 0, 40, tempCanvas.height - 20);
+      const fillHeight = (currentTemp/50)*(tempCanvas.height-20);
+      tctx.fillStyle=gradient;
+      tctx.fillRect(30,(tempCanvas.height-20)-fillHeight,40,fillHeight);
 
-      const fillHeight = (currentTemp / 50) * (tempCanvas.height - 20);
-      tctx.fillStyle = gradient;
-      tctx.fillRect(30, (tempCanvas.height - 20) - fillHeight, 40, fillHeight);
-
-      tctx.fillStyle = "#111";
-      tctx.font = "bold 16px Segoe UI";
-      tctx.textAlign = "center";
-      tctx.textBaseline = "top";
-      tctx.fillText(Math.round(currentTemp) + "°C", tempCanvas.width / 2, tempCanvas.height - 18);
+      tctx.fillStyle="#111";
+      tctx.font="bold 16px Segoe UI";
+      tctx.textAlign="center";
+      tctx.textBaseline="top";
+      tctx.fillText(Math.round(currentTemp)+"°C",tempCanvas.width/2,tempCanvas.height-18);
 
       requestAnimationFrame(drawTemp);
     }
@@ -692,10 +415,9 @@
     drawMoisture();
     drawTemp();
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').then(() => console.log("Service Worker registered"));
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('sw.js');
     }
   </script>
 </body>
-
 </html>
