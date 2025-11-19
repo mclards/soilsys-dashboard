@@ -8,7 +8,7 @@ function createWindow () {
       nodeIntegration: true
     }
   })
-  win.loadFile('index.html')  // your dashboard entry point
+  win.loadFile('index.html') 
 }
 
 app.whenReady().then(createWindow)
