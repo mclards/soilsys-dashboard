@@ -12,7 +12,7 @@ You can access the system in three ways:
 
 ## 📥 Downloads
 
-- 📱 **Android App:** [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SoilSysDashboard.apk)  
+- 📱 **Android App:** [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SOIL_MOISTURE_Original_EDITED.apk)  
 - 💻 **Windows App:** [SoilSysDashboard.Setup.exe](https://github.com/mclards/soilsys-dashboard/releases/download/v5.1/SoilSysDashboard.Setup.exe)  
 - 🌐 **Web Dashboard (PWA):** [SoilSys Dashboard](https://mclards.github.io/soilsys-dashboard/)  
 
@@ -80,7 +80,7 @@ You can access the system in three ways:
 
 ### 📱 Android App
 1. Download and install:  
-   👉 [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SoilSysDashboard.apk)
+   👉 [SoilSysApp.apk](https://github.com/mclards/soilsys-dashboard/releases/download/v5.0/SOIL_MOISTURE_Original_EDITED.apk)
 
 ### 💻 Windows App
 1. Download and run:  
